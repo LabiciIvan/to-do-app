@@ -4,10 +4,10 @@ import Note from './components/Note';
 import CreateNote from './components/CreateNote';
 
 export default function App() {
-    const localKey = 'notes';
 
-    const [notes, setNotes] = useState(getNotes(localKey));
-    const [create, setCreate] = useState(false);
+    const localKey              = 'notes';
+    const [notes, setNotes]     = useState(getNotes(localKey));
+    const [create, setCreate]   = useState(false);
 
     const renderNotes = (noteObject) => {
         return noteObject.map((note) => (
