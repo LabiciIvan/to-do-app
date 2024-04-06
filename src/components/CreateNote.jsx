@@ -3,23 +3,20 @@ import { generateID, getNotes, saveLocal, toJsonString } from './Utilities';
 
 const CreateNote = ({updateParent}) => {
 
-    const localKey = 'notes';
-
-    const [name, setName] = useState('');
-    const [category, setCategory] = useState('');
+    const localKey                  = 'notes';
+    const [name, setName]           = useState('');
+    const [category, setCategory]   = useState('');
 
     const closeCreateNote = () => {
         updateParent();
     }
 
-
     const createNewNote = () => {
-
         if (name.length === 0 || category.length === 0) {
             return;
         }
-        
-        let allNotes = getNotes(localKey);
+
+        let notes = getNotes(localKey);
 
         let id = generateID(localKey);
 
@@ -29,11 +26,10 @@ const CreateNote = ({updateParent}) => {
             category: category
         }
 
-        allNotes.push(newNote);
+        notes.push(newNote);
 
-        saveLocal(localKey, toJsonString(allNotes));
+        saveLocal(localKey, toJsonString(notes));
         updateParent();
-
     }
 
     return (

@@ -4,16 +4,17 @@ import { getNotes, saveLocal, toJsonString } from './Utilities';
 
 export default function Note({note, updateParent}) {
 
-    const open = 'flex';
-    const close = 'none';
-    const localKey = 'notes';
-
     const { id, name, category } = note;
-    const [display, setDisplay] = useState(close);
-    const [noteName, setNoteName] = useState(name);
-    const [noteCategory, setNoteCategory] = useState(category);
 
-    const detailNote = (id) => {
+    const open      = 'flex';
+    const close     = 'none';
+    const localKey  = 'notes';
+
+    const [display, setDisplay]             = useState(close);
+    const [noteName, setNoteName]           = useState(name);
+    const [noteCategory, setNoteCategory]   = useState(category);
+
+    const detailNote = () => {
         setDisplay(open);
     }
 
@@ -24,21 +25,21 @@ export default function Note({note, updateParent}) {
     }
 
     const deleteNote = (id) => {
-        let allNotes = getNotes(localKey);
+        let notes = getNotes(localKey);
 
-        let newNotes = allNotes.filter((item) => item.id !== id);
+        let updatedNotes = notes.filter((item) => item.id !== id);
 
-        saveLocal(localKey, toJsonString(newNotes));
+        saveLocal(localKey, toJsonString(updatedNotes));
         updateParent();
     }
 
     const updateNote = (id) => {
-        let tempNotes = getNotes(localKey);
+        let notes = getNotes(localKey);
 
-        const updatedArray = tempNotes.map(note => {
-            if (note.id === id) {
+        const updatedNotes = notes.map(item => {
+            if (item.id === id) {
               return {
-                ...note,
+                ...item,
                 name: noteName,
                 category: noteCategory 
               };
@@ -47,7 +48,7 @@ export default function Note({note, updateParent}) {
           });
 
         setDisplay(close);
-        saveLocal(localKey, toJsonString(updatedArray));
+        saveLocal(localKey, toJsonString(updatedNotes));
         updateParent();
     }
 
@@ -55,7 +56,7 @@ export default function Note({note, updateParent}) {
         <div className='note-hero'>
             <h4>{name}</h4>
             <button className='btn' onClick={() => deleteNote(id)}>Remove</button>
-            <button className='btn' onClick={() => detailNote(id)}>...</button>
+            <button className='btn' onClick={detailNote}>...</button>
 
             <div className="note-details" style={{display: display}}>
                 <button onClick={() => closeNote(id)}>X</button>
