@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import '../css/note.css';
 import { getNotes, saveLocal, toJsonString } from './Utilities';
+import Comment from './Comment';
 
 export default function Note({note, updateParent}) {
 
-    const { id, name, category } = note;
+    const { id, name, category, comments } = note;
 
     const open      = 'flex';
     const close     = 'none';
@@ -34,6 +35,12 @@ export default function Note({note, updateParent}) {
     }
 
     const updateNote = (id) => {
+
+        if (noteName === name || noteCategory === category) {
+            closeNote();
+            return
+        };
+
         let notes = getNotes(localKey);
 
         const updatedNotes = notes.map(item => {
@@ -53,7 +60,7 @@ export default function Note({note, updateParent}) {
     }
 
     return (
-        <div className='note-hero'>
+        <div className='note'>
             <h4>{name}</h4>
             <button className='btn' onClick={() => deleteNote(id)}>Remove</button>
             <button className='btn' onClick={detailNote}>...</button>
@@ -64,6 +71,7 @@ export default function Note({note, updateParent}) {
                 <input type="text" value={noteCategory} onChange={(e) => setNoteCategory(e.target.value)}/>
                 <button onClick={() => deleteNote(id)}>DELETE</button>
                 <button onClick={() => updateNote(id)}>Update</button>
+                <Comment comm={comments} belongsID={id}/>
             </div>
         </div>
     )

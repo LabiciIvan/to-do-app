@@ -13,6 +13,7 @@ const CreateNote = ({updateParent}) => {
 
     const createNewNote = () => {
         if (name.length === 0 || category.length === 0) {
+            closeCreateNote();
             return;
         }
 

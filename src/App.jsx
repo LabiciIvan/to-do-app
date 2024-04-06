@@ -25,10 +25,10 @@ export default function App() {
     }
 
     return (
-        <div>
+        <>
             <button onClick={renderCreateNotes}>Make note</button>
             {notes ? renderNotes(notes) : 'No notes'}
             {create ? create : ''}
-        </div>
+        </>
     )
 }
