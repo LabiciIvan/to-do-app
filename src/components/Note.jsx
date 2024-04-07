@@ -58,16 +58,16 @@ export default function Note({note, updateParent}) {
         <div className='note d-flex border p-2 rounded-2 shadow-sm w-75 m-2'>
             <h4 className='display-6 d-flex w-75 ps-2'>{name}</h4>
             <div className="container d-flex w-25 justify-content-around">
-                <button className='btn btn-danger' onClick={() => deleteNote(id)}>Remove</button>
-                <button className='btn btn-info' onClick={detailNote} data-bs-toggle="modal" data-bs-target={`#modal-${id}`}>...</button>
+                <button className='btn btn-danger' onClick={() => deleteNote(id)}><i className="bi bi-trash3-fill"></i></button>
+                <button className='btn btn-info' onClick={detailNote} data-bs-toggle="modal" data-bs-target={`#modal-${id}`}><i className="bi bi-box-arrow-in-up-right text-light"></i></button>
             </div>
 
             <div className="note-details modal fade"  id={`modal-${id}`} tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <button className='btn btn-danger' onClick={() => deleteNote(id)} data-bs-dismiss="modal" aria-label="Close">DELETE</button>
-                            <button className='btn btn-primary ms-1' onClick={() => updateNote(id)} data-bs-dismiss="modal" aria-label="Close">Update</button>
+                            <button className='btn btn-danger' onClick={() => deleteNote(id)} data-bs-dismiss="modal" aria-label="Close">Delete <i className="bi bi-trash3-fill"></i></button>
+                            <button className='btn btn-primary ms-1' onClick={() => updateNote(id)} data-bs-dismiss="modal" aria-label="Close">Save <i className="bi bi-floppy-fill"></i></button>
                             <button className='btn btn-secondary ms-auto' onClick={() => closeNote(id)} data-bs-dismiss="modal" aria-label="Close">X</button>
                         </div>
                         <div className="modal-body">

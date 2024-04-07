@@ -13,9 +13,9 @@ export default function Comment({comm, belongsID}) {
 
         return copyComments.map((item) => (
             <div className='container bg-light m-2 rounded-2 p-2 d-flex flex-column justify-content-center' key={item.id}>
-                <p className='small text-end border-bottom p-1 text-secondary'>{item.time}</p>
+                <p className='small text-end border-bottom p-1 text-secondary'>{item.time} <i className="bi bi-calendar3 ms-2"></i></p>
                 <p className='lead w-100'>{item.text}</p>
-                <button className='btn btn-danger ms-auto' onClick={() => deleteComment(item.id)}>Delete</button>
+                <button className='btn btn-danger ms-auto' onClick={() => deleteComment(item.id)}><i className="bi bi-trash3-fill"></i></button>
             </div>
         ))
     }
@@ -100,7 +100,7 @@ export default function Comment({comm, belongsID}) {
         <>
         <div className='container d-flex flex-column'>
             <textarea className='form-control m-2' placeholder='Add comments to notes' onChange={(e) => (setComment(e.target.value))} value={comment}></textarea>
-            <button className='btn btn-primary ms-auto' onClick={() => addComment()}>Add</button>
+            <button className='btn btn-primary ms-auto' onClick={() => addComment()}>Post <i className="bi bi-file-earmark-text"></i></button>
         </div>
             {comments ? renderComments() : <div className='container'><p className='blockquote-footer'>No comments to this note.</p></div>}
         </>

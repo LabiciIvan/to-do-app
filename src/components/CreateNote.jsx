@@ -38,14 +38,14 @@ const CreateNote = ({updateParent}) => {
         <div className="modal-dialog">
             <div className="modal-content d-flex rounded-2">
                 <div className='modal-header d-flex w-100 border-0 bg-light'>
-                    <button className='btn btn-danger ms-auto' onClick={closeCreateNote}>CLOSE</button>
+                    <button className='btn btn-secondary ms-auto' onClick={closeCreateNote}>X</button>
                 </div>
                 <div className='modal-body d-flex flex-column w-100 p-3 border-0 align-items-center bg-light'>
                     <input className='form-control m-2' type='text' placeholder='Note name' onChange={(e) => setName(e.target.value)}/>
                     <input className='form-control m-2' type='text' placeholder='Note category' onChange={(e) => setCategory(e.target.value)}/>
                 </div>
                 <div className="modal-footer">
-                    <button className='btn btn-primary w-50' onClick={createNewNote}>SAVE</button>
+                    <button className='btn btn-primary w-50' onClick={createNewNote}>Save <i className="bi bi-floppy-fill ms-2"></i></button>
                 </div>
             </div>
         </div>
