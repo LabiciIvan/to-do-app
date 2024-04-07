@@ -9,20 +9,25 @@ export default function Comment({comm, belongsID}) {
 
     const renderComments = () => {
         return comments.map((item) => (
-            <h5 key={item.id}>{item.text}</h5>
+            <div key={item.id}>
+                <h5 >{item.text}</h5>
+                <button onClick={() => deleteComment(item.id)}>Delete comment</button>
+            </div>
         ))
     }
 
     const generateCommentID = () => {
         let id = 0;
 
-        comments.forEach(element => {
-            if (element.id >= id) {
-                id = element.id;
-            }
-        });
+        if (comments) {
+            comments.forEach(element => {
+                if (element.id >= id) {
+                    id = element.id;
+                }
+            });
+        }
 
-        return id === 0 ? id : id + 1;
+        return !comments ? id : id + 1;
     }
 
     const addComment = () => {
@@ -42,6 +47,10 @@ export default function Comment({comm, belongsID}) {
 
         let updatedNotes = notes.map((note) => {
             if (note.id === belongsID) {
+                if (!note.comments) {
+                    note.comments = [];
+                }
+
                 note.comments.push(newComment);
             }
             return note;
@@ -51,6 +60,21 @@ export default function Comment({comm, belongsID}) {
 
         setComments(prevComments => [...prevComments, newComment]);
         setComment('');
+    }
+
+    const deleteComment = (id) => {
+        let updateComments = comments.filter((item) =>  item.id !== id);
+
+        let notes = getNotes(localKey);
+
+        notes.forEach(element => {
+            if (element.id === belongsID) {
+                element.comments = updateComments;
+            }
+        });
+
+        saveLocal(localKey, toJsonString(notes));
+        setComments(updateComments);
 
     }
     
