@@ -8,10 +8,14 @@ export default function Comment({comm, belongsID}) {
     const [comment, setComment]     = useState('');
 
     const renderComments = () => {
-        return comments.map((item) => (
-            <div key={item.id}>
-                <h5 >{item.text}</h5>
-                <button onClick={() => deleteComment(item.id)}>Delete comment</button>
+
+        let copyComments = [...comments].reverse();
+
+        return copyComments.map((item) => (
+            <div className='container bg-light m-2 rounded-2 p-2 d-flex flex-column justify-content-center' key={item.id}>
+                <p className='small text-end border-bottom p-1 text-secondary'>{item.time}</p>
+                <p className='lead w-100'>{item.text}</p>
+                <button className='btn btn-danger ms-auto' onClick={() => deleteComment(item.id)}>Delete</button>
             </div>
         ))
     }
@@ -31,16 +35,30 @@ export default function Comment({comm, belongsID}) {
     }
 
     const addComment = () => {
-
         if (comment.length === 0) {
             return;
         }
-        
+
         let id = generateCommentID();
 
+        let dateInstance = new Date();
+
+        const months = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+          ];
+
+        const month = months[dateInstance.getMonth()];
+        const day = dateInstance.getDate();
+        const year = dateInstance.getFullYear();
+        const hours = dateInstance.getHours().toString().padStart(2, '0');
+        const minutes = dateInstance.getMinutes().toString().padStart(2, '0');
+        const seconds = dateInstance.getSeconds().toString().padStart(2, '0');
+        
         let newComment = {
             id: id,
-            text: comment
+            text: comment,
+            time: `${month} ${day}, ${year} ${hours}:${minutes}:${seconds}`
         }
 
         let notes = getNotes(localKey);
@@ -58,7 +76,7 @@ export default function Comment({comm, belongsID}) {
 
         saveLocal(localKey, toJsonString(updatedNotes));
 
-        setComments(prevComments => [...prevComments, newComment]);
+        setComments(comments ? [...comments, newComment] : [newComment]);
         setComment('');
     }
 
@@ -80,13 +98,11 @@ export default function Comment({comm, belongsID}) {
     
     return (
         <>
-        <div className="add-comment">
-            <textarea cols="30" rows="10" placeholder='Add comments to notes' onChange={(e) => (setComment(e.target.value))} value={comment}></textarea>
-            <button onClick={() => addComment()}>Add</button>
+        <div className='container d-flex flex-column'>
+            <textarea className='form-control m-2' placeholder='Add comments to notes' onChange={(e) => (setComment(e.target.value))} value={comment}></textarea>
+            <button className='btn btn-primary ms-auto' onClick={() => addComment()}>Add</button>
         </div>
-        <div className="comment">
-            {comments ? renderComments() : 'No comments to this note.'}
-        </div>
+            {comments ? renderComments() : <div className='container'><p className='blockquote-footer'>No comments to this note.</p></div>}
         </>
     )
 }
