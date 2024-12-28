@@ -26,14 +26,14 @@
     display: flex;
     flex-direction: column;
     padding: 0 10px;
-    transform-origin: top; // Ensures scaling happens from the top
-    transform: scaleY(0); // Collapsed state
+    transform-origin: top;
+    transform: scaleY(0);
     transition: transform 0.3s ease, opacity 0.3s ease;
-    opacity: 0; // Invisible when collapsed
+    opacity: 0;
 
     &.expanded {
-        transform: scaleY(1); // Expanded state
-        opacity: 1; // Fully visible
+        transform: scaleY(1);
+        opacity: 1;
       }
 
     .ticket-row {
