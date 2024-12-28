@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import {useState} from 'react';
 import '../scss/category-control.scss';
 
 
@@ -61,59 +61,65 @@ export default function CategoryControl({id, onSetCreateNewSection, sections, on
     'calendar': <div className='calendar-section-2'>
       Calendar is unavailable!
     </div>,
-    'section': <div className='add-section-2'>
-      <input className='add-new-section' onChange={(e) => setSectionName(prev => e.target.value)} value={sectionName}/>
-      <div className='add-section-colors'>
-        {sectionColors.map(color => 
-          <button
-            key={color}
-            onClick={() => setSectionColor(color)}
-            style={{
-              backgroundColor: color, 
-              border: sectionColor === color ? '3px solid black' : '2px solid transparent',
-              borderRadius: '50%',
-              width: '40px',
-              height: '40px',
-              cursor: 'pointer'
-            }}
-          />
-        )}
-      </div>
-      <button onClick={handleSaveFromInputForNewSection}>Save</button>
-      <button onClick={() => handleSetOverlay(null)}>Abort</button>
-    </div>,
-    'ticket': <div className='ticket-section-2'>
-      {sections.length === 0 ?
-        'Create sections before creating tickets!'
-        :
-        <div className="ticket-create">
-          <input value={ticketName} onChange={(e) => setTicketName(e.target.value)} />
-          <h3>Assign to a section</h3>
-          {
-            sections.map(section =>
-              <div key={section.id}>
-                <h4>{section.name}</h4>
-                <button
-                  key={section.id}
-                  onClick={() => setTicketBelongs(() => section.id)}
-                  style={{ 
-                    borderRadius: '50%',
-                    width: '30px',
-                    height: '30px',
-                    cursor: 'pointer',
-                    border: (ticketBelongs === section.id ? '2px solid black' : 'none'),
-                    backgroundColor: section.color
-                  }}
-                />
-              </div>
-            )
-          }
-          <button onClick={handleSaveTicketToSection}>Save</button>
-          <button onClick={() => handleSetOverlay(null)}>Abort</button>
+    'section':
+      <div className='create-new-section'>
+        <input className='name' placeholder='Section name...' onChange={(e) => setSectionName(prev => e.target.value)} value={sectionName}/>
+        <div className='colors'>
+          {sectionColors.map(color => 
+            <button
+              key={color}
+              onClick={() => setSectionColor(color)}
+              style={{
+                backgroundColor: color, 
+                border: sectionColor === color ? '3px solid black' : '2px solid transparent',
+                borderRadius: '50%',
+                width: '30px',
+                height: '30px',
+                cursor: 'pointer'
+              }}
+            />
+          )}
         </div>
-
-      }
-    </div>
+        <div className="buttons">
+          <button className='save btn' onClick={handleSaveFromInputForNewSection}>Save</button>
+          <button className='abort btn' onClick={() => handleSetOverlay(null)}>Abort</button>
+        </div>
+      </div>,
+    'ticket':
+      <div className='create-new-ticket'>
+        {sections.length === 0 ?
+          <div className="error">
+            Create sections before creating tickets!
+          </div>
+          :
+          <>
+            <input className='name' placeholder='Ticket name...' value={ticketName} onChange={(e) => setTicketName(e.target.value)} />
+            <div className='colors-pick-section'>
+              {sections.map(section =>
+                  <div className='color-item' key={section.id}>
+                    <h4>{section.name}</h4>
+                    <button
+                      key={section.id}
+                      onClick={() => setTicketBelongs(() => section.id)}
+                      style={{ 
+                        borderRadius: '50%',
+                        width: '20px',
+                        height: '20px',
+                        cursor: 'pointer',
+                        border: (ticketBelongs === section.id ? '2px solid black' : 'none'),
+                        backgroundColor: section.color
+                      }}
+                    />
+                  </div>
+                )}
+            </div>
+            <div className="buttons">
+              <button className='save btn' onClick={handleSaveTicketToSection}>Save</button>
+              <button className='abort btn' onClick={() => handleSetOverlay(null)}>Abort</button>
+            </div>
+          </>
+        }
+      </div>
   };
 
   return (
