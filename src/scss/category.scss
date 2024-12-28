@@ -3,5 +3,10 @@
 .category {
     display: grid;
     width: 100%;
-    max-width: 1000px;
+    /*
+    This is relative because the category-control.scss
+    file will have the DIV with the overlay className as
+    absolute to cover the whole category.
+    */
+    position: relative;
 }

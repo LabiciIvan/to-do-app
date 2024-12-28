@@ -30,3 +30,10 @@ body {
     // border-left: 1px solid gray;
     background-color: white;
 }
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 1000px;
+}

@@ -12,7 +12,8 @@ const Nav = ({links, onSetUpdateLinks, onSetUpdateViewCategory}) => {
 
     let newCategory = {
       icon: generateIconForCustomLinks('New...'),
-      content: 'New...'
+      content: 'New...',
+      sections: [],
     };
 
     // Find a new id for this resource

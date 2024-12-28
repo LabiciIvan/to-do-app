@@ -30,7 +30,7 @@ export default function App() {
   const [viewCategory, setViewCategory] = useState(null);
 
   useEffect(() => {
-    
+
     if (viewCategory) {
       const selectedCategory = mainNavLinks.find(link => link.id === viewCategory.id);
       setViewCategory(() => selectedCategory);
@@ -42,14 +42,35 @@ export default function App() {
   }
 
   const updateViewCategory = (id) => {
+    if (id < 4) return;  // Main Pages will not be displayed from Category component
     const selectedCategory = mainNavLinks.find(link => link.id === id);
     setViewCategory(() => selectedCategory);
+  }
+
+  const handleStoreNewSection = (id, section) => {
+
+    const navLinksWithNewSectionAdded = mainNavLinks.map(link => link.id === id ? {...link, sections: [...link.sections, section]} : link);
+
+    setMainNavLinks(() => navLinksWithNewSectionAdded);
+  }
+
+  const handleStoreNewTicketToSection = (categoryID, section) => {
+
+
+    const navLinksWithTicketToSectionAdded = mainNavLinks.map(category =>
+      category.id === categoryID ? {...category, sections: section} : category
+    );
+
+    setMainNavLinks(() => navLinksWithTicketToSectionAdded);
   }
 
   return (
     <div className="app">
       <Nav links={mainNavLinks} onSetUpdateLinks={updateNavLinks} onSetUpdateViewCategory={updateViewCategory}/>
-      {viewCategory && <Category category={viewCategory}/>}
+      <div className="container">
+
+        {viewCategory && <Category category={viewCategory} onSetHandleStoreNewSection={handleStoreNewSection} onSetHandleStoreNewTicketToSection={handleStoreNewTicketToSection}/>}
+      </div>
     </div>
   );
 }
