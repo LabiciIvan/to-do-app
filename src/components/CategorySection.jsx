@@ -31,12 +31,6 @@ export default function CategorySection({section}) {
   };
 
   const handleExpandToggle = () => {
-    if (expand) {
-      setTimeout(() => setVisible(prev => !prev), 300)
-    } else {
-      setVisible(() => true);
-    }
-  
     setExpand(prev => !prev)
   }
 
@@ -46,9 +40,7 @@ export default function CategorySection({section}) {
         <i className="bi bi-arrow-down-short" onClick={handleExpandToggle} style={iconStyle}/>
         <h3 style={sectionTextStyle}> {section.name} </h3>
       </div>
-      {
-        visible && 
-        <div className={`section-tickets ${expand ? 'expanded' : ''}`}>
+      <div className={`section-tickets ${expand ? 'expanded' : ''}`}>
         {section.tickets.map(ticket => 
           <div key={ticket.id} className="ticket-row">
             <div className="icon">
@@ -60,7 +52,6 @@ export default function CategorySection({section}) {
           </div>
         )}
       </div>
-      }
     </div>
   )
 }

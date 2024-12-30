@@ -36,11 +36,13 @@ $blueHoverColor: #4a90e2;
     transform: scaleY(0);
     transition: transform 0.3s ease, opacity 0.3s ease;
     opacity: 0;
+    height: 0;
 
     &.expanded {
         transform: scaleY(1);
         opacity: 1;
-      }
+        height: auto;
+    }
 
     .ticket-row {
         display: grid;
