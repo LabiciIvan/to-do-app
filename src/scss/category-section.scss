@@ -1,0 +1,167 @@
+$blueHoverColor: #4a90e2;
+$deleteIconColor: #ff4500;
+
+.category-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.section-name {
+    display: flex;
+    flex-direction: row;
+    padding: 5px;
+    align-items: center;
+
+    i {
+        margin-right: 10px;
+
+        &:hover {
+            color: $blueHoverColor;
+        }
+    }
+
+    h3 {
+        border-radius: 10px;
+        padding: 5px;
+        font-size: 16px;
+        font-weight: normal;
+    }
+
+    .edit-section-name {
+        display: flex;
+        min-height: 25px;
+        border-radius: 5px;
+        max-height: 35px;
+        align-self: center;
+        grid-area: 3/3/4/7;
+        border: 1px solid #ddd;
+        padding: 2px 5px;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        color: #333;
+        outline: none;
+        transition: all 0.3s ease;
+
+        &:focus {
+            border-color: #007bff;
+            background-color: #fff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+        }
+
+        &::placeholder {
+            color: #aaa;
+            font-style: italic;
+        }
+    }
+
+    .section-control {
+        width: 20%;
+        height: 100%;
+        margin-left: 10px;
+        position: relative;
+
+        .absolute-icons {
+            display: flex;
+            flex-direction: row;
+            position: absolute;
+            cursor: pointer;
+            top: 20%;
+            left: -100px;
+            z-index: -10;
+            transition: left 0.2s ease-in;
+
+            // Trash icon
+            .bi.bi-trash-fill {
+                color: $deleteIconColor;
+
+                &:hover {
+                    transform: scale(1.3);
+                }
+            }
+
+            // Pencil icon
+            .bi.bi-pencil-square {
+                color: $blueHoverColor;
+
+                &:hover {
+                    transform: scale(1.3);
+                }
+            }
+
+        }
+    }
+
+    &:hover {
+        .section-control {
+            .absolute-icons {
+                left: 0px;
+                z-index: 10;
+            }
+        }
+    }
+}
+
+.section-tickets {
+    display: flex;
+    flex-direction: column;
+    padding: 0 10px;
+    transform-origin: top;
+    transform: scaleY(0);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+    height: 0;
+
+    &.expanded {
+        transform: scaleY(1);
+        opacity: 1;
+        height: auto;
+    }
+
+    .ticket-row {
+        display: grid;
+        height: 50px;
+        align-items: center;
+        grid-template-columns: 0.1fr 0.6fr 0.2fr 0.1fr;
+        border-bottom: 1px solid #e1eef4;
+
+        &:hover {
+            transition: 0.4s;
+            background-color: #f0fafe;
+            transform: scale(1.02);
+        }
+
+        .icon {
+            grid-area: 1/1/2/2;
+            justify-self: center;
+
+            input:hover {
+                cursor: pointer;
+            }
+        }
+
+        .name {
+            display: flex;
+            height: 100%;
+            width: 100%;
+            grid-area: 1/2/2/3;
+            align-items: center;
+
+        }
+
+        .assigned {
+            grid-area: 1/3/2/4;
+        }
+
+        .priority {
+            grid-area: 1/4/2/5;
+            justify-self: center;
+        }
+
+        .name:hover,
+        .assigned:hover,
+        .priority:hover {
+            cursor: pointer;
+            color: $blueHoverColor;
+        }
+    }
+}
