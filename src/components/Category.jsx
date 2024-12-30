@@ -3,7 +3,7 @@ import '../scss/category.scss';
 import CategoryControl from './CategoryControl';
 import CategorySection from './CategorySection';
 
-const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTicketToSection}) => {
+const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTicketToSection, onSetSaveNewSectionName, onSetHandleDeleteSectionFromCategory, onSetHandleDeleteCategory}) => {
 
 
   const {id, icon, content, sections} = category;
@@ -49,8 +49,14 @@ const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTick
     onSetHandleStoreNewTicketToSection(id, sectionsUpdated);
   }
 
-  const handleDeleteCategory = (id) => {
-    console.log('delete: ', id);
+  const handleChangeSectionNameInCategory = (name, sectionID) => {
+    const updatedSectionsWithNewName = sections.map(section => section.id === sectionID ? {...section, name: name} : section)
+    onSetSaveNewSectionName(id, updatedSectionsWithNewName);
+  }
+
+  const handleDeleteSectionFromCategory = (sectionID) => {
+    const updatedSectionWithoutASection = sections.filter(section => section.id !== sectionID);
+    onSetHandleDeleteSectionFromCategory(id, updatedSectionWithoutASection);
   }
 
   return (
@@ -61,12 +67,12 @@ const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTick
           <h3>{category.content}</h3>
         </div>
         <div className='control'>
-          <div className='delete' onClick={() => handleDeleteCategory(category.id)}>
+          <div className='delete' onClick={() => onSetHandleDeleteCategory(category.id)}>
             <i className='bi bi-trash-fill' />
           </div>
         </div>
       </div>
-      {sections.map(section => <CategorySection key={section.id} section={section}/>)}
+      {sections.map(section => <CategorySection key={section.id} section={section} onSetSaveNewSectionName={handleChangeSectionNameInCategory} onSetDeleteSectionFromCategory={handleDeleteSectionFromCategory}/>)}
     </div>
   );
 }

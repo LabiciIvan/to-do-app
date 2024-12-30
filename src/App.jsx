@@ -64,12 +64,35 @@ export default function App() {
     setMainNavLinks(() => navLinksWithTicketToSectionAdded);
   }
 
+  const handleStoreNewSectionNameForACategory = (categoryID, sections) => {
+    const navLinksUpdatedWithNewSectionNameForCategory = mainNavLinks.map(link => link.id === categoryID ? {...link, sections: sections} : link);
+    setMainNavLinks(() => navLinksUpdatedWithNewSectionNameForCategory);
+  }
+
+  const handleDeleteSectionFromCategory = (categoryID, sections) => {
+    const navLinksUpdatedWihoutASpecificSectionInCategory = mainNavLinks.map(link => link.id === categoryID ? {...link, sections: sections} : link);
+    setMainNavLinks(() => navLinksUpdatedWihoutASpecificSectionInCategory);
+  }
+
+  const handleDeleteCategory=(id) => {
+    const updatedNavLinksWithoutACategory = mainNavLinks.filter(link => link.id !== id);
+    setMainNavLinks(() => updatedNavLinksWithoutACategory);
+  }
+  
   return (
     <div className="app">
       <Nav links={mainNavLinks} onSetUpdateLinks={updateNavLinks} onSetUpdateViewCategory={updateViewCategory}/>
       <div className="container">
 
-        {viewCategory && <Category category={viewCategory} onSetHandleStoreNewSection={handleStoreNewSection} onSetHandleStoreNewTicketToSection={handleStoreNewTicketToSection}/>}
+        {viewCategory &&
+          <Category
+            category={viewCategory}
+            onSetHandleStoreNewSection={handleStoreNewSection}
+            onSetHandleStoreNewTicketToSection={handleStoreNewTicketToSection}
+            onSetSaveNewSectionName={handleStoreNewSectionNameForACategory}
+            onSetHandleDeleteSectionFromCategory={handleDeleteSectionFromCategory}
+            onSetHandleDeleteCategory={handleDeleteCategory}
+          />}
       </div>
     </div>
   );
