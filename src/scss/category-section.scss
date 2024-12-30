@@ -1,3 +1,4 @@
+$blueHoverColor: #4a90e2;
 
 .category-section {
     display: flex;
@@ -12,6 +13,10 @@
 
     i { 
         margin-right: 10px;
+
+        &:hover {
+            color: $blueHoverColor;
+        }
     }
 
     h3 {
@@ -46,16 +51,26 @@
 
         &:hover {
             transition: 0.4s;
-            background-color: #e1eef4;
+            background-color: #f0fafe;
+            transform: scale(1.02);
         }
 
         .icon {
             grid-area: 1/1/2/2;
             justify-self: center;
+
+            input:hover {
+                cursor: pointer;
+            }
         }
 
         .name {
+            display: flex;
+            height: 100%;
+            width: 100%;
             grid-area: 1/2/2/3;
+            align-items: center;
+
         }
 
         .assigned {
@@ -65,6 +80,13 @@
         .priority {
             grid-area: 1/4/2/5;
             justify-self: center;
+        }
+
+        .name:hover,
+        .assigned:hover,
+        .priority:hover {
+            cursor: pointer;
+            color: $blueHoverColor;
         }
     }
 }

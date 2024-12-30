@@ -49,10 +49,23 @@ const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTick
     onSetHandleStoreNewTicketToSection(id, sectionsUpdated);
   }
 
+  const handleDeleteCategory = (id) => {
+    console.log('delete: ', id);
+  }
+
   return (
     <div className='category' key={category.id} >
       <CategoryControl key={category.id} id={id} onSetCreateNewSection={handleCreateNewSection} sections={sections} onSetCreateNewTicket={handleCreateNewTicket}/>
-      <h3>Category: {category.content}</h3>
+      <div className='header'>
+        <div className='title'>
+          <h3>{category.content}</h3>
+        </div>
+        <div className='control'>
+          <div className='delete' onClick={() => handleDeleteCategory(category.id)}>
+            <i className='bi bi-trash-fill' />
+          </div>
+        </div>
+      </div>
       {sections.map(section => <CategorySection key={section.id} section={section}/>)}
     </div>
   );

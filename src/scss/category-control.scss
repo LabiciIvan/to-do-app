@@ -1,4 +1,5 @@
 $bgControlsCategoryColor: #dedede;
+$blueHoverColor: #4a90e2;
 
 .category-control {
     display: grid;
@@ -16,21 +17,46 @@ $bgControlsCategoryColor: #dedede;
     .controls-4,
     .controls-5 {
         display: flex;
+        height: 30px;
+        position: relative;
+        align-self: center;
         justify-content: center;
         align-items: center;
-        font-weight: bold;
-        color: gray;
+        font-weight: 500;
+        color: #333;
         border-radius: 5px;
+        cursor: pointer;
 
         &:hover {
-            cursor: pointer;
-            color: black;
-            transition: 0.4s;
-            background-color: $bgControlsCategoryColor;
+            color: $blueHoverColor;
         }
 
         i {
             margin-right: 5px;
+        }
+
+        &.controls-1::after,
+        &.controls-2::after,
+        &.controls-3::after,
+        &.controls-4::after,
+        &.controls-5::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background-color: $blueHoverColor;
+            transition: width 0.3s ease, left 0.3s ease;
+        }
+
+        &.controls-1:hover::after, 
+        &.controls-2:hover::after, 
+        &.controls-3:hover::after, 
+        &.controls-4:hover::after, 
+        &.controls-5:hover::after {
+            width: 100%;
+            left: 0;
         }
     }
 }
@@ -66,10 +92,14 @@ $bgControlsCategoryColor: #dedede;
         display: flex;
         width: 100%;
         justify-content: flex-end;
-        padding: 10px 10px 0 0;
+        padding: 15px 15px 0 0;
         // This is close icon
         .bi.bi-x-lg {
             cursor: pointer;
+
+            &:hover {
+                color: $blueHoverColor;
+            }
         }
     }
 
@@ -142,6 +172,11 @@ $bgControlsCategoryColor: #dedede;
         align-self: center;
         justify-self: center;
         column-gap: 4px;
+
+        button:hover {
+            box-shadow: 1px 3px 1px 2px #D3D3D3;
+            transform: translateY(-2px);
+        }
     }
 
     .buttons {

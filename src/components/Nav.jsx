@@ -52,11 +52,11 @@ const Nav = ({links, onSetUpdateLinks, onSetUpdateViewCategory}) => {
     const availableColors = [
       "#FF4500", // Red-Orange
       "#FFA500", // Orange
-      "#FFD700", // Gold (Modern Yellow)
+      "#FFD700", // Gold
       "#32CD32", // Lime Green
       "#1E90FF", // Dodger Blue
       "#4B0082", // Indigo
-      "#EE82EE"  // Violet (Modern Pinkish Shade)
+      "#EE82EE"  // Violet
     ];
 
     const firstLetter = linkName.charAt(0).toUpperCase();
