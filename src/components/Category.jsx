@@ -3,7 +3,7 @@ import '../scss/category.scss';
 import CategoryControl from './CategoryControl';
 import CategorySection from './CategorySection';
 
-const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTicketToSection, onSetSaveNewSectionName, onSetHandleDeleteSectionFromCategory, onSetHandleDeleteCategory}) => {
+const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTicketToSection, onSetSaveNewSectionName, onSetHandleDeleteSectionFromCategory, onSetHandleDeleteCategory, onSetUpdateCategoryAsTicketPriorityChanged}) => {
 
 
   const {id, icon, content, sections} = category;
@@ -24,7 +24,7 @@ const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTick
     onSetHandleStoreNewSection(categoryId, section);
   }
 
-  const handleCreateNewTicket = (sectionID, ticketName) => {
+  const handleCreateNewTicket = (sectionID, ticketName, ticketPriority) => {
 
     let ID = 0
 
@@ -39,7 +39,7 @@ const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTick
       id: ID,
       belongsTo: sectionID,
       name: ticketName,
-      priotity: 'low'
+      priority: ticketPriority,
     }
 
     const sectionsUpdated = sections.map(section =>
@@ -59,6 +59,16 @@ const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTick
     onSetHandleDeleteSectionFromCategory(id, updatedSectionWithoutASection);
   }
 
+  const handleUpdateCategorySectionWithNewSection = (sectionID, updatedSection) => {
+    // updatedSections handled in CategorySection component
+    // Only pass it further to reach the App.jsx component
+    const updatedCategorySections = category.sections.map(section => section.id === sectionID ? updatedSection : section);
+
+    const updatedCategory = {...category, sections: updatedCategorySections};
+
+    onSetUpdateCategoryAsTicketPriorityChanged(id, updatedCategory);
+  }
+
   return (
     <div className='category' key={category.id} >
       <CategoryControl key={category.id} id={id} onSetCreateNewSection={handleCreateNewSection} sections={sections} onSetCreateNewTicket={handleCreateNewTicket}/>
@@ -72,7 +82,15 @@ const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTick
           </div>
         </div>
       </div>
-      {sections.map(section => <CategorySection key={section.id} section={section} onSetSaveNewSectionName={handleChangeSectionNameInCategory} onSetDeleteSectionFromCategory={handleDeleteSectionFromCategory}/>)}
+      {sections.map(section =>
+        <CategorySection
+          key={section.id}
+          section={section}
+          onSetSaveNewSectionName={handleChangeSectionNameInCategory}
+          onSetDeleteSectionFromCategory={handleDeleteSectionFromCategory}
+          onSetSaveNewSectionToCategory={handleUpdateCategorySectionWithNewSection}
+        />
+      )}
     </div>
   );
 }
