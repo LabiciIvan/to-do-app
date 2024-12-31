@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import '../scss/category-control.scss';
+import Priority from './Priority';
 
 
 export default function CategoryControl({id, onSetCreateNewSection, sections, onSetCreateNewTicket}) {
@@ -11,10 +12,10 @@ export default function CategoryControl({id, onSetCreateNewSection, sections, on
   const [sectionName, setSectionName] = useState('');
   const [sectionColor, setSectionColor] = useState('#7D7D7D');
 
-  // To track the ticket name and which section it belongs
+  // To track the ticket name, priority and which section it belongs
   const [ticketName, setTicketName] = useState('');
   const [ticketBelongs, setTicketBelongs] = useState(null);
-
+  const [ticketPriority, setTicketPriority] = useState('low');
 
   const handleSetOverlay = (showItInSection2) => {
 
@@ -43,7 +44,11 @@ export default function CategoryControl({id, onSetCreateNewSection, sections, on
     // Can't continue if ticket has no name or doesn't belong to a section
     if (ticketName.length === 0 || ticketBelongs === null) return;
 
-    onSetCreateNewTicket(ticketBelongs, ticketName);
+    onSetCreateNewTicket(ticketBelongs, ticketName, ticketPriority);
+  }
+
+  const handleTicketPriority = (type) => {
+    setTicketPriority(() => type);
   }
 
   const sectionColors = [
@@ -94,6 +99,10 @@ export default function CategoryControl({id, onSetCreateNewSection, sections, on
           :
           <>
             <input className='name' placeholder='Ticket name...' value={ticketName} onChange={(e) => setTicketName(e.target.value)} />
+            <div className="wrapper-control">
+              <p>Pick priority:</p>
+              <Priority isExpanded={true} onSetPriorityAssignment={handleTicketPriority}/>
+            </div>
             <div className='colors-pick-section'>
               {sections.map(section =>
                   <div className='color-item' key={section.id}>
