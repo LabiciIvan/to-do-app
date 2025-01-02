@@ -64,7 +64,7 @@ export default function App() {
     setMainNavLinks(() => navLinksWithTicketToSectionAdded);
   }
 
-  const handleStoreNewSectionNameForACategory = (categoryID, sections) => {
+  const updateCategorySection = (categoryID, sections) => {
     const navLinksUpdatedWithNewSectionNameForCategory = mainNavLinks.map(link => link.id === categoryID ? {...link, sections: sections} : link);
     setMainNavLinks(() => navLinksUpdatedWithNewSectionNameForCategory);
   }
@@ -130,7 +130,7 @@ export default function App() {
             category={viewCategory}
             onSetHandleStoreNewSection={handleStoreNewSection}
             onSetHandleStoreNewTicketToSection={handleStoreNewTicketToSection}
-            onSetSaveNewSectionName={handleStoreNewSectionNameForACategory}
+            onSetUpdateCategorySection={updateCategorySection}
             onSetHandleDeleteSectionFromCategory={handleDeleteSectionFromCategory}
             onSetHandleDeleteCategory={handleDeleteCategory}
             onSetUpdateCategoryAsTicketPriorityChanged={handleUpdateCategoryAsTicketPriorityChanged}

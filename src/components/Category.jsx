@@ -3,7 +3,7 @@ import '../scss/category.scss';
 import CategoryControl from './CategoryControl';
 import CategorySection from './CategorySection';
 
-const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTicketToSection, onSetSaveNewSectionName, onSetHandleDeleteSectionFromCategory, onSetHandleDeleteCategory, onSetUpdateCategoryAsTicketPriorityChanged}) => {
+const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTicketToSection, onSetUpdateCategorySection, onSetHandleDeleteSectionFromCategory, onSetHandleDeleteCategory, onSetUpdateCategoryAsTicketPriorityChanged}) => {
 
 
   const {id, icon, content, sections} = category;
@@ -49,9 +49,9 @@ const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTick
     onSetHandleStoreNewTicketToSection(id, sectionsUpdated);
   }
 
-  const handleChangeSectionNameInCategory = (name, sectionID) => {
-    const updatedSectionsWithNewName = sections.map(section => section.id === sectionID ? {...section, name: name} : section)
-    onSetSaveNewSectionName(id, updatedSectionsWithNewName);
+  const changeSectionNameAndColor = (name, color, sectionID) => {
+    const updatedSectionsWithNewName = sections.map(section => section.id === sectionID ? {...section, name: name, color: color} : section)
+    onSetUpdateCategorySection(id, updatedSectionsWithNewName);
   }
 
   const handleDeleteSectionFromCategory = (sectionID) => {
@@ -86,7 +86,7 @@ const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTick
         <CategorySection
           key={section.id}
           section={section}
-          onSetSaveNewSectionName={handleChangeSectionNameInCategory}
+          onSetChangeSectionNameAndColor={changeSectionNameAndColor}
           onSetDeleteSectionFromCategory={handleDeleteSectionFromCategory}
           onSetSaveNewSectionToCategory={handleUpdateCategorySectionWithNewSection}
         />

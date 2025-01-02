@@ -1,11 +1,13 @@
 import {useState} from 'react';
 import '../scss/category-section.scss';
 import Ticket from './Ticket';
+import ColorSection from './ColorSection';
 
-export default function CategorySection({section, onSetSaveNewSectionName, onSetDeleteSectionFromCategory, onSetSaveNewSectionToCategory}) {
+export default function CategorySection({section, onSetChangeSectionNameAndColor, onSetDeleteSectionFromCategory, onSetSaveNewSectionToCategory}) {
   const [expand, setExpand] = useState(true);
   const [sectionName, setSectionName] = useState(section.name);
   const [editSectionName, setEditSectionName] = useState(false);
+  const [sectionColor, setSectionColor] = useState(section.color);
 
   function hexToRgb(hex) {
     const sanitizedHex = hex.replace('#', '');
@@ -37,7 +39,7 @@ export default function CategorySection({section, onSetSaveNewSectionName, onSet
 
   const handleEditSectionName = (key, id) => {
     if (key === 'Enter' || key === 'save') {
-      onSetSaveNewSectionName(sectionName, id);
+      onSetChangeSectionNameAndColor(sectionName, sectionColor, id);
       setEditSectionName(prev => !prev);
     } else if (key === 'Escape' || key === 'abort') {
       setSectionName(() => section.name);
@@ -69,8 +71,13 @@ export default function CategorySection({section, onSetSaveNewSectionName, onSet
               onKeyDown={(e) => handleEditSectionName(e.key, section.id)}
             />
             <div className='wrapper-controls'>
-              <i className='bi bi-x-lg' onClick={() => handleEditSectionName('abort', section.id)}/>
-              <i className='bi bi-check-lg' onClick={() => handleEditSectionName('save', section.id)}/>
+              <div className='controls'>
+                <i className='bi bi-x-lg' onClick={() => handleEditSectionName('abort', section.id)}/>
+                <i className='bi bi-check-lg' onClick={() => handleEditSectionName('save', section.id)}/>
+              </div>
+              <div className='colors'>
+                <ColorSection onSetSectionColor={setSectionColor} colorSelected={sectionColor} width='20px' height='20px'/>
+              </div>
             </div>
           </div> :
           <h3 style={sectionTextStyle}> {section.name} </h3>

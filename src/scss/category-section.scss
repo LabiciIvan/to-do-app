@@ -20,14 +20,26 @@ $deleteIconColor: #ff4500;
         .wrapper-controls {
             padding-top: 5px;
             display: flex;
-            justify-content: flex-end;
+            flex-direction: column;
 
-            i {
-                cursor: pointer;
-                &:hover {
-                    color: $blueHoverColor;
+            .controls {
+                display: flex;
+                justify-content: flex-end;
+
+                i {
+                    cursor: pointer;
+
+                    &:hover {
+                        color: $blueHoverColor;
+                    }
                 }
             }
+
+            .colors {
+                display: flex;
+                justify-content: space-between;
+            }
+
         }
     }
 
