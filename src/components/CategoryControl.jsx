@@ -105,17 +105,24 @@ export default function CategoryControl({id, onSetCreateNewSection, sections, on
             </div>
             <div className='colors-pick-section'>
               {sections.map(section =>
-                  <div className='color-item' key={section.id}>
+                  <div
+                    className='color-item'
+                    key={section.id}
+                    onClick={() => setTicketBelongs(() => section.id)}
+                    style={{ 
+                      cursor: 'pointer',
+                      border: (ticketBelongs === section.id ? '2px solid black' : 'none'),
+                     }}
+                  >
                     <h4>{section.name}</h4>
                     <button
                       key={section.id}
-                      onClick={() => setTicketBelongs(() => section.id)}
-                      style={{ 
+                      style={{
+                        cursor: 'pointer',
                         borderRadius: '50%',
+                        border: 'none',
                         width: '20px',
                         height: '20px',
-                        cursor: 'pointer',
-                        border: (ticketBelongs === section.id ? '2px solid black' : 'none'),
                         backgroundColor: section.color
                       }}
                     />

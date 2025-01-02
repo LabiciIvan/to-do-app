@@ -36,10 +36,10 @@ export default function CategorySection({section, onSetSaveNewSectionName, onSet
   }
 
   const handleEditSectionName = (key, id) => {
-    if (key === 'Enter') {
+    if (key === 'Enter' || key === 'save') {
       onSetSaveNewSectionName(sectionName, id);
       setEditSectionName(prev => !prev);
-    } else if (key === 'Escape') {
+    } else if (key === 'Escape' || key === 'abort') {
       setSectionName(() => section.name);
       setEditSectionName(prev => !prev);
     }
@@ -60,7 +60,21 @@ export default function CategorySection({section, onSetSaveNewSectionName, onSet
     <div className="category-section">
       <div className="section-name">
         <i className="bi bi-arrow-down-short" onClick={handleExpandToggle} style={iconStyle}/>
-        {editSectionName ? <input className='edit-section-name' autoFocus value={sectionName} onChange={(e) => setSectionName(e.target.value)} onKeyDown={(e) => handleEditSectionName(e.key, section.id)} /> : <h3 style={sectionTextStyle}> {section.name} </h3> }
+        {editSectionName ?
+          <div className='edit-section-wrapper'>
+            <input
+              className='edit-section-name'
+              autoFocus value={sectionName}
+              onChange={(e) => setSectionName(e.target.value)}
+              onKeyDown={(e) => handleEditSectionName(e.key, section.id)}
+            />
+            <div className='wrapper-controls'>
+              <i className='bi bi-x-lg' onClick={() => handleEditSectionName('abort', section.id)}/>
+              <i className='bi bi-check-lg' onClick={() => handleEditSectionName('save', section.id)}/>
+            </div>
+          </div> :
+          <h3 style={sectionTextStyle}> {section.name} </h3>
+        }
         <div className='section-control'>
           <div className='absolute-icons'>
             {!editSectionName &&
