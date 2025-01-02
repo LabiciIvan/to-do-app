@@ -12,7 +12,39 @@ $deleteIconColor: #ff4500;
     padding: 5px;
     align-items: center;
 
+    .edit-section-wrapper {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 10px;
+
+        .wrapper-controls {
+            padding-top: 5px;
+            display: flex;
+            flex-direction: column;
+
+            .controls {
+                display: flex;
+                justify-content: flex-end;
+
+                i {
+                    cursor: pointer;
+
+                    &:hover {
+                        color: $blueHoverColor;
+                    }
+                }
+            }
+
+            .colors {
+                display: flex;
+                justify-content: space-between;
+            }
+
+        }
+    }
+
     i {
+        align-self: flex-start;
         margin-right: 10px;
 
         &:hover {

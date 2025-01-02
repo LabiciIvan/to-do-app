@@ -1,6 +1,7 @@
 import {useState} from 'react';
 import '../scss/category-control.scss';
 import Priority from './Priority';
+import ColorSection from './ColorSection';
 
 
 export default function CategoryControl({id, onSetCreateNewSection, sections, onSetCreateNewTicket}) {
@@ -51,16 +52,6 @@ export default function CategoryControl({id, onSetCreateNewSection, sections, on
     setTicketPriority(() => type);
   }
 
-  const sectionColors = [
-    "#FF4500", // Red-Orange
-    "#FFA500", // Orange
-    "#FFD700", // Gold
-    "#32CD32", // Lime Green
-    "#1E90FF", // Dodger Blue
-    "#4B0082", // Indigo
-    "#EE82EE"  // Violet
-  ];
-
   // Declare all section elements
   const section2Elements = {
     'calendar': <div className='calendar-section-2'>
@@ -70,20 +61,7 @@ export default function CategoryControl({id, onSetCreateNewSection, sections, on
       <div className='create-new-section'>
         <input className='name' placeholder='Section name...' onChange={(e) => setSectionName(prev => e.target.value)} value={sectionName}/>
         <div className='colors'>
-          {sectionColors.map(color => 
-            <button
-              key={color}
-              onClick={() => setSectionColor(color)}
-              style={{
-                backgroundColor: color, 
-                border: sectionColor === color ? '3px solid black' : '2px solid transparent',
-                borderRadius: '50%',
-                width: '30px',
-                height: '30px',
-                cursor: 'pointer'
-              }}
-            />
-          )}
+          <ColorSection onSetSectionColor={setSectionColor} colorSelected={sectionColor}/>
         </div>
         <div className="buttons">
           <button className='save btn' onClick={handleSaveFromInputForNewSection}>Save</button>
@@ -105,17 +83,24 @@ export default function CategoryControl({id, onSetCreateNewSection, sections, on
             </div>
             <div className='colors-pick-section'>
               {sections.map(section =>
-                  <div className='color-item' key={section.id}>
+                  <div
+                    className='color-item'
+                    key={section.id}
+                    onClick={() => setTicketBelongs(() => section.id)}
+                    style={{ 
+                      cursor: 'pointer',
+                      border: (ticketBelongs === section.id ? '2px solid black' : 'none'),
+                     }}
+                  >
                     <h4>{section.name}</h4>
                     <button
                       key={section.id}
-                      onClick={() => setTicketBelongs(() => section.id)}
-                      style={{ 
+                      style={{
+                        cursor: 'pointer',
                         borderRadius: '50%',
+                        border: 'none',
                         width: '20px',
                         height: '20px',
-                        cursor: 'pointer',
-                        border: (ticketBelongs === section.id ? '2px solid black' : 'none'),
                         backgroundColor: section.color
                       }}
                     />

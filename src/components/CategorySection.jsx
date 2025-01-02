@@ -1,11 +1,13 @@
 import {useState} from 'react';
 import '../scss/category-section.scss';
 import Ticket from './Ticket';
+import ColorSection from './ColorSection';
 
-export default function CategorySection({section, onSetSaveNewSectionName, onSetDeleteSectionFromCategory, onSetSaveNewSectionToCategory}) {
+export default function CategorySection({section, onSetChangeSectionNameAndColor, onSetDeleteSectionFromCategory, onSetSaveNewSectionToCategory}) {
   const [expand, setExpand] = useState(true);
   const [sectionName, setSectionName] = useState(section.name);
   const [editSectionName, setEditSectionName] = useState(false);
+  const [sectionColor, setSectionColor] = useState(section.color);
 
   function hexToRgb(hex) {
     const sanitizedHex = hex.replace('#', '');
@@ -36,10 +38,10 @@ export default function CategorySection({section, onSetSaveNewSectionName, onSet
   }
 
   const handleEditSectionName = (key, id) => {
-    if (key === 'Enter') {
-      onSetSaveNewSectionName(sectionName, id);
+    if (key === 'Enter' || key === 'save') {
+      onSetChangeSectionNameAndColor(sectionName, sectionColor, id);
       setEditSectionName(prev => !prev);
-    } else if (key === 'Escape') {
+    } else if (key === 'Escape' || key === 'abort') {
       setSectionName(() => section.name);
       setEditSectionName(prev => !prev);
     }
@@ -60,7 +62,26 @@ export default function CategorySection({section, onSetSaveNewSectionName, onSet
     <div className="category-section">
       <div className="section-name">
         <i className="bi bi-arrow-down-short" onClick={handleExpandToggle} style={iconStyle}/>
-        {editSectionName ? <input className='edit-section-name' autoFocus value={sectionName} onChange={(e) => setSectionName(e.target.value)} onKeyDown={(e) => handleEditSectionName(e.key, section.id)} /> : <h3 style={sectionTextStyle}> {section.name} </h3> }
+        {editSectionName ?
+          <div className='edit-section-wrapper'>
+            <input
+              className='edit-section-name'
+              autoFocus value={sectionName}
+              onChange={(e) => setSectionName(e.target.value)}
+              onKeyDown={(e) => handleEditSectionName(e.key, section.id)}
+            />
+            <div className='wrapper-controls'>
+              <div className='controls'>
+                <i className='bi bi-x-lg' onClick={() => handleEditSectionName('abort', section.id)}/>
+                <i className='bi bi-check-lg' onClick={() => handleEditSectionName('save', section.id)}/>
+              </div>
+              <div className='colors'>
+                <ColorSection onSetSectionColor={setSectionColor} colorSelected={sectionColor} width='20px' height='20px'/>
+              </div>
+            </div>
+          </div> :
+          <h3 style={sectionTextStyle}> {section.name} </h3>
+        }
         <div className='section-control'>
           <div className='absolute-icons'>
             {!editSectionName &&
