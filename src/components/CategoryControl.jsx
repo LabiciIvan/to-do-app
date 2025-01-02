@@ -101,7 +101,7 @@ export default function CategoryControl({id, onSetCreateNewSection, sections, on
             <input className='name' placeholder='Ticket name...' value={ticketName} onChange={(e) => setTicketName(e.target.value)} />
             <div className="wrapper-control">
               <p>Pick priority:</p>
-              <Priority isExpanded={true} onSetPriorityAssignment={handleTicketPriority}/>
+              <Priority isExpanded={true} onSetPriorityAssignment={handleTicketPriority} addBorders={true} />
             </div>
             <div className='colors-pick-section'>
               {sections.map(section =>
