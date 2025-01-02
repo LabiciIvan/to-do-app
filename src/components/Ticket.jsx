@@ -25,7 +25,11 @@ export default function Ticket({ticket, onSetHandlePriorityChange}) {
         <i className='bi bi-flag-fill' />
         <p>{ticket.priority}</p>
       </div>
-      <Priority isExpanded={expandChildPriority} onSetExpand={setExpandChildPriority} onSetPriorityAssignment={handlePriorityAssignment}/>
+      <Priority
+        isExpanded={expandChildPriority}
+        onSetExpand={setExpandChildPriority}
+        onSetPriorityAssignment={handlePriorityAssignment}
+      />
     </div>
   </div>
   )
