@@ -3,7 +3,7 @@ import Priority from './Priority';
 import Check from './Check';
 
 // All styles are in 'category-section.scss' for this component
-export default function Ticket({ticket, onSetHandlePriorityChange}) {
+export default function Ticket({ticket, onSetHandlePriorityChange, onSetHandleViewTicket}) {
 
   const [expandChildPriority, setExpandChildPriority] = useState(false);
 
@@ -19,8 +19,8 @@ export default function Ticket({ticket, onSetHandlePriorityChange}) {
       <div className="icon">
         <Check />
       </div>
-      <div className="name">{ticket.name}</div>
-      <div className="assigned">John</div>
+      <div className="name" onClick={() => onSetHandleViewTicket(ticket)}>{ticket.name}</div>
+      <div className="assigned">{ticket.assignee.length === 0 ? 'none' : ticket.assignee}</div>
       <div className='priority'>
         <div className={`type ${ticket.priority}`} onClick={() => setExpandChildPriority(prev => !prev)}>
           <i className='bi bi-flag-fill' />

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import '../scss/nav.scss';
+import toDO from '../assets/to-do.svg';
 
 const Nav = ({links, onSetUpdateLinks, onSetUpdateViewCategory}) => {
 
@@ -69,7 +70,7 @@ const Nav = ({links, onSetUpdateLinks, onSetUpdateViewCategory}) => {
   return (
     <nav className='nav'>
       <header>
-         To Do
+        <img src={toDO}/>
       </header>
       <div className='body'>
         <button className='wrapper-create-nav-links' onClick={createNewCategory}>
