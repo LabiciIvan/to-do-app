@@ -79,6 +79,18 @@ const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTick
     setViewTicket(() => ticket);
   }
 
+  const handleTicketEdit = (ticket) => {
+    const sectionWhereTicketBelongs = category.sections.filter(section => section.id === ticket.belongsTo);
+
+    const ticketsUpdated = sectionWhereTicketBelongs[0].tickets.map(iteratedTickets => iteratedTickets.id === ticket.id ? ticket : iteratedTickets);
+
+    sectionWhereTicketBelongs[0].tickets = ticketsUpdated;
+
+    const sectionsUpdated = category.sections.map(section => section.id === ticket.belongsTo ? sectionWhereTicketBelongs[0] : section);
+
+    onSetUpdateCategorySection(category.id, sectionsUpdated);
+  }
+
   return (
     <div className='category' key={category.id} >
       <CategoryControl key={category.id} id={id} onSetCreateNewSection={handleCreateNewSection} sections={sections} onSetCreateNewTicket={handleCreateNewTicket}/>
@@ -92,7 +104,7 @@ const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTick
           </div>
         </div>
       </div>
-      <ViewTicket viewTicket={viewTicket} onSetViewTicket={setViewTicket}/>
+      <ViewTicket viewTicket={viewTicket} onSetViewTicket={setViewTicket} onSetHandleTicketEdit={handleTicketEdit}/>
       {sections.map(section =>
         <CategorySection
           key={section.id}

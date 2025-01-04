@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import '../scss/view-ticket.scss';
 
-export default function ViewTicket({viewTicket, onSetViewTicket}) {
+export default function ViewTicket({viewTicket, onSetViewTicket, onSetHandleTicketEdit}) {
 
   const [allowEditName, setAllowEditName] = useState(false);
   const [ticketName, setTicketName] = useState(viewTicket?.name || '');
@@ -20,9 +20,15 @@ export default function ViewTicket({viewTicket, onSetViewTicket}) {
     } else if (type === 'saveOrCancelEdit') {
       if (value === 'Enter') {
         setAllowEditName(prev => !prev);
+        setTicketName(() => ticketName);
+        const editedTicket = {...viewTicket, name: ticketName};
+
+        onSetHandleTicketEdit(editedTicket);
+
         // Handle save new ticket name
       } else if (value === 'Escape') {
         setAllowEditName(prev => !prev);
+        setTicketName(() => viewTicket.name)
       }
     }
   }
@@ -44,7 +50,7 @@ export default function ViewTicket({viewTicket, onSetViewTicket}) {
                   value={ticketName}
                   onKeyDown={(e) => handleEditTicketName(e.key, 'saveOrCancelEdit')}
                 /> :
-                <h4 onClick={handleAllowEditTicketName}>{viewTicket.name}</h4>
+                <h4 onClick={handleAllowEditTicketName}>{ticketName}</h4>
               }
             </div>
             <div className='ticket-description'>
