@@ -216,8 +216,8 @@ $deleteIconColor: #ff4500;
                 color: #FFD700;
             }
 
+            &.urgent,
             &.high,
-            &.medium,
             &.low {
                 i {
                     &:hover {

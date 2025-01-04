@@ -1,0 +1,37 @@
+.view-ticket-overlay {
+    display: grid;
+    width: 0px;
+    overflow: hidden;
+    right: 0;
+    height: 100vh;
+    z-index: 5;
+    transition: width 0.2s;
+    background-color: white;
+    position: absolute;
+
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(12, 1fr);
+
+    &.expand {
+        width: 100%;
+    }
+
+    .close-icon {
+        grid-area: 1/10/2/11;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        i {
+            cursor: pointer;
+        }
+    }
+
+    .ticket-name {
+        grid-area: 2/2/3/10;
+    }
+
+    .ticket-description {
+        grid-area: 3/2/4/10;
+    }
+}

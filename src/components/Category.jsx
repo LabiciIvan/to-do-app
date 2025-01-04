@@ -1,10 +1,14 @@
 
+import { useState } from 'react';
+
 import '../scss/category.scss';
 import CategoryControl from './CategoryControl';
 import CategorySection from './CategorySection';
+import ViewTicket from './ViewTicket';
 
 const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTicketToSection, onSetUpdateCategorySection, onSetHandleDeleteSectionFromCategory, onSetHandleDeleteCategory, onSetUpdateCategoryAsTicketPriorityChanged}) => {
 
+  const [viewTicket, setViewTicket] = useState(false);
 
   const {id, icon, content, sections} = category;
 
@@ -40,6 +44,8 @@ const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTick
       belongsTo: sectionID,
       name: ticketName,
       priority: ticketPriority,
+      description: '',
+      assignee: [],
     }
 
     const sectionsUpdated = sections.map(section =>
@@ -69,6 +75,10 @@ const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTick
     onSetUpdateCategoryAsTicketPriorityChanged(id, updatedCategory);
   }
 
+  const handleViewTicket = (ticket) => {
+    setViewTicket(() => ticket);
+  }
+
   return (
     <div className='category' key={category.id} >
       <CategoryControl key={category.id} id={id} onSetCreateNewSection={handleCreateNewSection} sections={sections} onSetCreateNewTicket={handleCreateNewTicket}/>
@@ -82,6 +92,7 @@ const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTick
           </div>
         </div>
       </div>
+      <ViewTicket viewTicket={viewTicket} onSetViewTicket={setViewTicket}/>
       {sections.map(section =>
         <CategorySection
           key={section.id}
@@ -89,6 +100,7 @@ const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTick
           onSetChangeSectionNameAndColor={changeSectionNameAndColor}
           onSetDeleteSectionFromCategory={handleDeleteSectionFromCategory}
           onSetSaveNewSectionToCategory={handleUpdateCategorySectionWithNewSection}
+          onSetHandleViewTicket={handleViewTicket}
         />
       )}
     </div>
