@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import '../scss/view-ticket.scss';
 
 export default function ViewTicket({viewTicket, onSetViewTicket, onSetHandleTicketEdit}) {
@@ -6,8 +6,15 @@ export default function ViewTicket({viewTicket, onSetViewTicket, onSetHandleTick
   const [allowEditName, setAllowEditName] = useState(false);
   const [ticketName, setTicketName] = useState(viewTicket?.name || '');
 
+  const [allowEditDescription, setAllowEditDescription] = useState(false);
+  const [ticketDescription, setTicketDescription] = useState(viewTicket?.description || '');
+
+  // Temporarily stores the ticket description to avoid unnecessary re-renders during typing
+  const tempTicketDescription = useRef('');
+
   useEffect(() => {
     setTicketName(viewTicket?.name || '');
+    setTicketDescription(viewTicket?.description || '');
   }, [viewTicket]);
 
   const handleAllowEditTicketName = () => {
@@ -33,6 +40,27 @@ export default function ViewTicket({viewTicket, onSetViewTicket, onSetHandleTick
     }
   }
 
+  const handleDescriptionTyping = (value) => {
+    tempTicketDescription.current = value;
+  }
+
+  const handleTicketDescription = () => {
+    setAllowEditDescription(prev => !prev);
+    setTicketDescription(() => tempTicketDescription.current);
+
+    const updatedTicket = {...viewTicket, description: tempTicketDescription.current};
+    onSetHandleTicketEdit(updatedTicket);
+  }
+
+  const renderTicketDescription = () => {
+    return ticketDescription.split('\n').map((line, index) => 
+      <span key={index}>
+        {line}
+        <br />
+      </span>
+    );
+  }
+
   return (
       <div className={`view-ticket-overlay ${viewTicket ? `expand` : ''}`}>
 
@@ -45,6 +73,7 @@ export default function ViewTicket({viewTicket, onSetViewTicket, onSetHandleTick
             <div className='ticket-name'>
               {allowEditName ?
                 <input
+                  maxLength={70}
                   autoFocus={true}
                   onChange={(e) => handleEditTicketName(e.target.value, 'editing')}
                   value={ticketName}
@@ -54,7 +83,24 @@ export default function ViewTicket({viewTicket, onSetViewTicket, onSetHandleTick
               }
             </div>
             <div className='ticket-description'>
-
+              {
+                allowEditDescription ?
+                <div className='textarea' contentEditable={true} suppressContentEditableWarning={true} onInput={(e) => handleDescriptionTyping(e.target.innerText)} >
+                  {ticketDescription}
+                </div> :
+                <div className='descriptions'>
+                  {ticketDescription.length === 0 ? <small>Add your description here...</small> : renderTicketDescription()}
+                </div>
+              }
+              <div className='controls'>
+                {allowEditDescription ?
+                  <>
+                    <i className='bi bi-x-lg' onClick={() => setAllowEditDescription(() => false)}/>
+                    <i className='bi bi-check-lg' onClick={() => handleTicketDescription()}/>
+                  </> :
+                  <i className='bi bi-pencil-square' onClick={() => setAllowEditDescription(() => true)}/>
+                }
+              </div>
             </div>
           </>
         }
