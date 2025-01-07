@@ -2,6 +2,7 @@ import {useState} from 'react';
 import '../scss/category-control.scss';
 import Priority from './Priority';
 import ColorSection from './ColorSection';
+import Calendar from './Calendar';
 
 
 export default function CategoryControl({id, onSetCreateNewSection, sections, onSetCreateNewTicket}) {
@@ -55,7 +56,7 @@ export default function CategoryControl({id, onSetCreateNewSection, sections, on
   // Declare all section elements
   const section2Elements = {
     'calendar': <div className='calendar-section-2'>
-      Calendar is unavailable!
+      <Calendar />
     </div>,
     'section':
       <div className='create-new-section'>
