@@ -45,6 +45,7 @@ const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTick
       name: ticketName,
       priority: ticketPriority,
       description: '',
+      comments: [],
       assignee: [],
     }
 
