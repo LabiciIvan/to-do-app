@@ -4,8 +4,26 @@ import './scss/app.scss';
 
 import Nav from "./components/Nav";
 import Category from "./components/Category";
+import Home from "./pages/Home";
+import Inbox from "./pages/Inbox";
+import Profile from "./pages/Profile";
 
 export default function App() {
+
+  const profiles = [
+    {
+      id: 0,
+      name: 'John'
+    },
+    {
+      id: 1,
+      name: 'Alice'
+    },
+    {
+      id: 2,
+      name: 'Trevor'
+    },
+  ];
 
   const navLinks = [
     {
@@ -16,12 +34,12 @@ export default function App() {
     {
       id: 2,
       icon: <i className="bi bi-envelope" />,
-      content: 'Inbox'
+      content: 'Inbox',
     },
     {
       id: 3,
       icon: <i className="bi bi-person" />,
-      content: 'Profile'
+      content: 'Profile',
     },
   ];
 
@@ -29,8 +47,11 @@ export default function App() {
 
   const [viewCategory, setViewCategory] = useState(null);
 
-  useEffect(() => {
+  const [viewPage, setViewPage] = useState(navLinks[0]);
 
+  const [profile, setProfile] = useState(null);
+
+  useEffect(() => {
     if (viewCategory) {
       const selectedCategory = mainNavLinks.find(link => link.id === viewCategory.id);
       setViewCategory(() => selectedCategory);
@@ -42,9 +63,16 @@ export default function App() {
   }
 
   const updateViewCategory = (id) => {
-    if (id < 4) return;  // Main Pages will not be displayed from Category component
-    const selectedCategory = mainNavLinks.find(link => link.id === id);
-    setViewCategory(() => selectedCategory);
+    const selectedView = mainNavLinks.find(link => link.id === id);
+
+    if (id < 4) {
+      setViewPage(() => selectedView);
+      setViewCategory(() => null);
+      return;
+    }
+
+    setViewPage(() => null);
+    setViewCategory(() => selectedView);
   }
 
   const handleStoreNewSection = (id, section) => {
@@ -55,7 +83,6 @@ export default function App() {
   }
 
   const handleStoreNewTicketToSection = (categoryID, section) => {
-
 
     const navLinksWithTicketToSectionAdded = mainNavLinks.map(category =>
       category.id === categoryID ? {...category, sections: section} : category
@@ -122,19 +149,29 @@ export default function App() {
 
   return (
     <div className="app">
-      <Nav links={mainNavLinks} onSetUpdateLinks={updateNavLinks} onSetUpdateViewCategory={updateViewCategory}/>
+      <Nav links={mainNavLinks} onSetUpdateLinks={updateNavLinks} onSetUpdateViewCategory={updateViewCategory} profile={profile} />
       <div className="container">
-
-        {viewCategory &&
-          <Category
-            category={viewCategory}
-            onSetHandleStoreNewSection={handleStoreNewSection}
-            onSetHandleStoreNewTicketToSection={handleStoreNewTicketToSection}
-            onSetUpdateCategorySection={updateCategorySection}
-            onSetHandleDeleteSectionFromCategory={handleDeleteSectionFromCategory}
-            onSetHandleDeleteCategory={handleDeleteCategory}
-            onSetUpdateCategoryAsTicketPriorityChanged={handleUpdateCategoryAsTicketPriorityChanged}
-          />}
+        {
+          viewCategory ?
+            <Category
+              category={viewCategory}
+              onSetHandleStoreNewSection={handleStoreNewSection}
+              onSetHandleStoreNewTicketToSection={handleStoreNewTicketToSection}
+              onSetUpdateCategorySection={updateCategorySection}
+              onSetHandleDeleteSectionFromCategory={handleDeleteSectionFromCategory}
+              onSetHandleDeleteCategory={handleDeleteCategory}
+              onSetUpdateCategoryAsTicketPriorityChanged={handleUpdateCategoryAsTicketPriorityChanged}
+              profile={profile}
+            />
+            :
+            viewPage && viewPage.content === 'Profile' ? (
+              <Profile profiles={profiles} profile={profile} onSetProfile={setProfile} />
+            ) : viewPage.content === 'Inbox' ? (
+              <Inbox />
+            ) : (
+              <Home />
+            )
+        }
       </div>
     </div>
   );
