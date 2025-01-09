@@ -6,9 +6,10 @@ import CategoryControl from './CategoryControl';
 import CategorySection from './CategorySection';
 import ViewTicket from './ViewTicket';
 
-const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTicketToSection, onSetUpdateCategorySection, onSetHandleDeleteSectionFromCategory, onSetHandleDeleteCategory, onSetUpdateCategoryAsTicketPriorityChanged}) => {
+const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTicketToSection, onSetUpdateCategorySection, onSetHandleDeleteSectionFromCategory, onSetHandleDeleteCategory, onSetUpdateCategoryAsTicketPriorityChanged, profile = null}) => {
 
   const [viewTicket, setViewTicket] = useState(false);
+  const [ticketComments, setTicketComments] = useState([]);
 
   const {id, icon, content, sections} = category;
 
@@ -90,6 +91,9 @@ const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTick
     const sectionsUpdated = category.sections.map(section => section.id === ticket.belongsTo ? sectionWhereTicketBelongs[0] : section);
 
     onSetUpdateCategorySection(category.id, sectionsUpdated);
+
+    // Update viewTicket to trigger re-render of ViewTicket component
+    setViewTicket(() => ticket);
   }
 
   return (
@@ -105,7 +109,7 @@ const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTick
           </div>
         </div>
       </div>
-      <ViewTicket viewTicket={viewTicket} onSetViewTicket={setViewTicket} onSetHandleTicketEdit={handleTicketEdit}/>
+      <ViewTicket viewTicket={viewTicket} onSetViewTicket={setViewTicket} onSetHandleTicketEdit={handleTicketEdit} comments={ticketComments} profile={profile}/>
       {sections.map(section =>
         <CategorySection
           key={section.id}

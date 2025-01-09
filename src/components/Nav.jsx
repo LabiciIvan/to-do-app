@@ -2,7 +2,7 @@ import { useState } from 'react';
 import '../scss/nav.scss';
 import toDO from '../assets/to-do.svg';
 
-const Nav = ({links, onSetUpdateLinks, onSetUpdateViewCategory}) => {
+const Nav = ({links, onSetUpdateLinks, onSetUpdateViewCategory, profile = null}) => {
 
   const [editLinkID, setEditLinkID] = useState(null);
   const [tempLinkName, setTempLinkName] = useState(null);
@@ -12,6 +12,7 @@ const Nav = ({links, onSetUpdateLinks, onSetUpdateViewCategory}) => {
     if (links.length > 7) return;
 
     let newCategory = {
+      owner: profile,
       icon: generateIconForCustomLinks('New...'),
       content: 'New...',
       sections: [],

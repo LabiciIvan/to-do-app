@@ -1,7 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import '../scss/view-ticket.scss';
+import Comment from './Comment';
+import AddComment from './AddComment';
 
-export default function ViewTicket({viewTicket, onSetViewTicket, onSetHandleTicketEdit}) {
+export default function ViewTicket({viewTicket, onSetViewTicket, onSetHandleTicketEdit, profile = null}) {
+
 
   const [allowEditName, setAllowEditName] = useState(false);
   const [ticketName, setTicketName] = useState(viewTicket?.name || '');
@@ -9,12 +12,15 @@ export default function ViewTicket({viewTicket, onSetViewTicket, onSetHandleTick
   const [allowEditDescription, setAllowEditDescription] = useState(false);
   const [ticketDescription, setTicketDescription] = useState(viewTicket?.description || '');
 
+  const [ticketComments, setTicketComments] = useState(viewTicket?.comments || []);
+
   // Temporarily stores the ticket description to avoid unnecessary re-renders during typing
   const tempTicketDescription = useRef('');
 
   useEffect(() => {
     setTicketName(viewTicket?.name || '');
     setTicketDescription(viewTicket?.description || '');
+    setTicketComments(() => viewTicket?.comments || '');
   }, [viewTicket]);
 
   const handleAllowEditTicketName = () => {
@@ -61,6 +67,35 @@ export default function ViewTicket({viewTicket, onSetViewTicket, onSetHandleTick
     );
   }
 
+  const addCommentToTicket = (comment) => {
+    const ID = ticketComments.reduce((initialID, comment) => comment.id > initialID ? comment.id : initialID, 0);
+
+    const commentUpdated = {...comment, id: ID + 1, owner: profile};
+
+    const ticketUpdated = {...viewTicket, comments: [...viewTicket.comments, commentUpdated]}
+    onSetHandleTicketEdit(ticketUpdated);
+  }
+
+  const deleteCommentFromTicket = (commentID) => {
+    const commentsUpdated = ticketComments.filter(comment => comment.id !== commentID);
+
+    const ticketUpdated = {...viewTicket, comments: commentsUpdated}
+
+    onSetHandleTicketEdit(ticketUpdated);
+  }
+
+  const handleCommentReply = (reply, commentID) => {
+    console.log('ticketComments', viewTicket)
+    const ID = viewTicket.comments.replies.reduce((initialID, iteratedReply) => iteratedReply.id > initialID ? iteratedReply.id : initialID, 0);
+
+    reply.id = ID + 1;
+
+    // const updatedTicket = {...viewTicket, viewTicket.comments.replies: [...viewTicket.comments.replies, reply]};
+
+
+    // console.log('updatedTicket', updatedTicket);
+  }
+
   return (
       <div className={`view-ticket-overlay ${viewTicket ? `expand` : ''}`}>
 
@@ -100,6 +135,15 @@ export default function ViewTicket({viewTicket, onSetViewTicket, onSetHandleTick
                   </> :
                   <i className='bi bi-pencil-square' onClick={() => setAllowEditDescription(() => true)}/>
                 }
+              </div>
+              <div className='comments'>
+                {
+                  ticketComments.length > 0 &&
+                  ticketComments.map(
+                    comment => <Comment key={comment.id} comment={comment} onSetDeleteCommentFromTicket={deleteCommentFromTicket} profile={profile} onSetHandleCommentReply={handleCommentReply}/>
+                  )
+                }
+                <AddComment onSetAddCommentToTicket={addCommentToTicket} />
               </div>
             </div>
           </>
