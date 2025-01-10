@@ -18,6 +18,7 @@ export default function Comment({comment, onSetDeleteCommentFromTicket, profile 
         timestamp: replyTimestamp,
         postedBy: profile
       }
+      setContent(() => '');
       onSetHandleCommentReply(commentReply, comment.id);
       return;
     }
@@ -44,6 +45,17 @@ export default function Comment({comment, onSetDeleteCommentFromTicket, profile 
         </div>
       </div>
       {(comment.owner?.name === profile?.name || comment.owner === null) && <button onClick={() => onSetDeleteCommentFromTicket(comment.id)}>Delete comment</button>}
+      <div className='replies'>
+        {
+          comment.replies.length > 0 &&
+          comment.replies.map(reply =>
+            <div className='reply' key={reply.id}>
+              <p>{reply.content}</p>
+              <p>{reply.timestamp}</p>
+            </div>
+          )
+        }
+      </div>
     </div>
   )
 }

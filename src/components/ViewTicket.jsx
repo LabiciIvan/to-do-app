@@ -85,15 +85,19 @@ export default function ViewTicket({viewTicket, onSetViewTicket, onSetHandleTick
   }
 
   const handleCommentReply = (reply, commentID) => {
-    console.log('ticketComments', viewTicket)
-    const ID = viewTicket.comments.replies.reduce((initialID, iteratedReply) => iteratedReply.id > initialID ? iteratedReply.id : initialID, 0);
+    const interestedComment = ticketComments.filter(comment => comment.id === commentID);
 
+    // Find the highest ID and sum with 1
+    const ID = interestedComment[0].replies.reduce((initialID, reply) => reply.id > initialID ? reply.id : initialID, 0);
+
+    // Add the generated ID based on the replies ID
     reply.id = ID + 1;
 
-    // const updatedTicket = {...viewTicket, viewTicket.comments.replies: [...viewTicket.comments.replies, reply]};
+    const updatedCommentWithReplies = ticketComments.map(comment => comment.id === commentID ? {...comment, replies: [...comment.replies, reply]} : comment);
 
+    const updatedTicket = {...viewTicket, comments: updatedCommentWithReplies}
 
-    // console.log('updatedTicket', updatedTicket);
+    onSetHandleTicketEdit(updatedTicket);
   }
 
   return (
