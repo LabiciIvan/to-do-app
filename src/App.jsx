@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import 'bootstrap-icons/font/bootstrap-icons.scss';
 import './scss/app.scss';
+import { testCategory } from "./dummy-data";
 
 import Nav from "./components/Nav";
 import Category from "./components/Category";
@@ -41,6 +42,7 @@ export default function App() {
       icon: <i className="bi bi-person" />,
       content: 'Profile',
     },
+    testCategory
   ];
 
   const [mainNavLinks, setMainNavLinks] = useState(navLinks);
