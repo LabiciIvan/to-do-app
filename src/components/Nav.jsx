@@ -9,7 +9,7 @@ const Nav = ({links, onSetUpdateLinks, onSetUpdateViewCategory, profile = null})
 
   const createNewCategory = () => {
 
-    if (links.length > 7) return;
+    if (links.length > 9) return;
 
     let newCategory = {
       owner: profile,
@@ -22,6 +22,7 @@ const Nav = ({links, onSetUpdateLinks, onSetUpdateViewCategory, profile = null})
     let id = links.reduce((max, item) => (item.id > max ? item.id : max), 0);
 
     newCategory = {...newCategory, id: id + 1, content: newCategory.content}
+    console.log('new category', newCategory);
 
     onSetUpdateLinks([...links, newCategory]);
   }
