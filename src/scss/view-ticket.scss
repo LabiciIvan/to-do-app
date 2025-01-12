@@ -1,22 +1,26 @@
-$blueHoverColor: #4a91e230;
+$blueHoverColor: #1582ff;
 
 .view-ticket-overlay {
     display: grid;
-    width: 0px;
+    width: 0;
+    opacity: 0;
     overflow: hidden;
     right: 0;
     height: 100vh;
     z-index: 5;
-    transition: width 0.2s;
-    background-color: white;
+    transition: width 0.2s, opacity 0.1s;
+    // background-color: white;
+    background-color: #f9f9f9;
     position: absolute;
-
+    padding: 0 8px 0 8px;
     grid-template-columns: repeat(10, 1fr);
     grid-template-rows: repeat(12, 1fr);
 
     &.expand {
         width: 100%;
+        opacity: 1;
         overflow: scroll;
+        overflow-x: hidden;
     }
 
     .close-icon {
@@ -24,6 +28,7 @@ $blueHoverColor: #4a91e230;
         display: flex;
         justify-content: center;
         align-items: center;
+        margin: 15px 15px 15px 0;
 
         i {
             cursor: pointer;
@@ -31,7 +36,7 @@ $blueHoverColor: #4a91e230;
     }
 
     .ticket-name {
-        grid-area: 2/2/3/10;
+        grid-area: 2/1/3/11;
 
         input {
             border: none;
@@ -43,7 +48,7 @@ $blueHoverColor: #4a91e230;
     }
 
     .ticket-description {
-        grid-area: 3/2/4/10;
+        grid-area: 3/1/4/11;
         display: flex;
         flex-direction: column;
         margin-top: 5px;
@@ -54,7 +59,11 @@ $blueHoverColor: #4a91e230;
             padding: 5px;
             width: 100%;
             height: 100%;
-            background-color: #f8f8f8;
+            color: #333;
+            border: 1px solid #e9e8e8;
+            background-color: white;
+            border-radius: 2px;
+            box-shadow: 0 2px 2px #0000001a;
 
             small {
                 color: gray;
@@ -70,21 +79,16 @@ $blueHoverColor: #4a91e230;
             justify-self: flex-end;
             justify-content: flex-end;
             align-items: center;
-            padding-right: 10px;
-            margin-top: 5px;
-
-            &:hover {
-                background-color: $blueHoverColor;
-                border-radius: 10px;
-                transition: 0.3s;
-            }
+            padding: 10px;
+            margin: 5px 0 5px 0;
 
             i {
                 cursor: pointer;
-                margin-left: 5px;
+                margin-left: 10px;
 
                 &:hover {
-                    color: black;
+                    color: $blueHoverColor;
+                    transform: scale(1.2);
                 }
             }
         }
@@ -96,14 +100,17 @@ $blueHoverColor: #4a91e230;
             height: 100%;
             max-width: inherit;
             font-size: 16px;
-
-            border: none;
-            background-color: #f8f8f8;
             padding: 5px;
 
             outline: none;
             white-space: pre-wrap;
             word-wrap: break-word;
+
+            color: #333;
+            background-color: white;
+            border: 1px solid #bcbcbc;
+            border-radius: 5px;
+            box-shadow: 0 5px 4px #0000001a;
 
               // Ensure every new line is a <br> instead of <div>
             & > div {
