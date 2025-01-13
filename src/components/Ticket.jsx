@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Priority from './Priority';
 import Check from './Check';
+import ProfileIcon from './ProfileIcon';
 
 // All styles are in 'category-section.scss' for this component
 export default function Ticket({ticket, onSetHandlePriorityChange, onSetHandleViewTicket}) {
@@ -20,7 +21,14 @@ export default function Ticket({ticket, onSetHandlePriorityChange, onSetHandleVi
         <Check />
       </div>
       <div className="name" onClick={() => onSetHandleViewTicket(ticket)}>{ticket.name}</div>
-      <div className="assigned">{ticket.assignee.length === 0 ? 'none' : ticket.assignee}</div>
+      <div className="assigned">
+        {
+          ticket.assignee.length === 0 ? 'none' : 
+          ticket.assignee.map(user => 
+            <ProfileIcon profile={user} key={user.id} enableName={false} width={40} height={40}/>
+          )
+        }
+      </div>
       <div className='priority'>
         <div className={`type ${ticket.priority}`} onClick={() => setExpandChildPriority(prev => !prev)}>
           <i className='bi bi-flag-fill' />
