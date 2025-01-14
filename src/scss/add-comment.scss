@@ -1,0 +1,62 @@
+$blueHoverColor: #1582ff;
+
+textarea {
+    display: flex;
+    width: 100%;
+    min-height: 70px;
+    height: auto;
+    padding: 5px;
+    resize: none;
+    overflow: hidden;
+    outline: none;
+
+    color: #333;
+    border: 1px solid #e9e8e8;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 2px #0000001a;
+    resize: vertical;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    margin: 5px 0 5px 0;
+
+    &:focus {
+        border: 1px solid #8d8c8c;
+    }
+}
+
+.comments-control {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 10px;
+    column-gap: 10px;
+
+    div {
+        display: flex;
+        cursor: pointer;
+        justify-content: center;
+
+        i {
+            margin-right: 5px;
+            color: #868686;
+        }
+
+        small {
+            color: #868686;
+        }
+
+        &:hover {
+
+            i {
+                color: $blueHoverColor;
+            }
+
+            small {
+                color: #030303;
+            }
+        }
+    }
+
+    .post-button:hover {
+        transform: scale(1);
+    }
+}

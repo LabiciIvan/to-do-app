@@ -1,8 +1,12 @@
 import { useState } from "react"
+import '../scss/add-comment.scss';
 
 export default function AddComment({parentCommentID = null, onSetAddCommentToTicket}) {
 
   const [content, setContent] = useState('');
+
+  const [enableButtons, setEnableButtons] = useState(false);
+  const [triggerOnce, setTriggerOnce] = useState(true);
 
   const handleContent = (value) => {
     setContent(() => value);
@@ -24,18 +28,42 @@ export default function AddComment({parentCommentID = null, onSetAddCommentToTic
       }
 
       onSetAddCommentToTicket(commentObj);
+      setContent(() => '');
+      setTriggerOnce(() => true);
+      setEnableButtons(prev => false);
+    }
+  }
 
+  const handleEnableButtons = (triggerPoint) => {
+    if (triggerPoint === 'textarea' && triggerOnce === true) {
+      setTriggerOnce(prev => !prev)
+      setEnableButtons(prev => true);
+    } else if (triggerPoint === 'cancel-button') {
       setContent(() => '');
-    } else if ('cancel') {
-      setContent(() => '');
+      setTriggerOnce(() => true);
+      setEnableButtons(prev => false);
     }
   }
 
   return (
     <>
-      <textarea value={content} onChange={(e) => handleContent(e.target.value)}/>
-      <button onClick={() => handleCommentStorage('save')} >Save</button>
-      <button onClick={() => handleCommentStorage('cancel')} >Cancel</button>
+      <textarea value={content} onChange={(e) => handleContent(e.target.value)} onClick={() => handleEnableButtons('textarea')}/>
+        <div className='comments-control'>
+          {
+            enableButtons &&
+            <>
+              <div className='post-button' onClick={() => handleCommentStorage('save')}>
+                <i className='bi bi-send-fill' />
+                <small>post</small>
+              </div>
+              <div className='cancel-button' onClick={() =>handleEnableButtons('cancel-button')}>
+                <i className='bi bi-x-square-fill' />
+                <small>cancel</small>
+              </div>
+            </>
+          }
+        </div>
+
     </>
   )
 }

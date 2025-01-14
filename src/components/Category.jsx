@@ -6,7 +6,7 @@ import CategoryControl from './CategoryControl';
 import CategorySection from './CategorySection';
 import ViewTicket from './ViewTicket';
 
-const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTicketToSection, onSetUpdateCategorySection, onSetHandleDeleteSectionFromCategory, onSetHandleDeleteCategory, onSetUpdateCategoryAsTicketPriorityChanged, profile = null}) => {
+const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTicketToSection, onSetUpdateCategorySection, onSetHandleDeleteSectionFromCategory, onSetHandleDeleteCategory, onSetUpdateCategoryAsTicketPriorityChanged, profile = null, users}) => {
 
   const [viewTicket, setViewTicket] = useState(false);
   const [ticketComments, setTicketComments] = useState([]);
@@ -98,7 +98,7 @@ const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTick
 
   return (
     <div className='category' key={category.id} >
-      <CategoryControl key={category.id} id={id} onSetCreateNewSection={handleCreateNewSection} sections={sections} onSetCreateNewTicket={handleCreateNewTicket}/>
+      <CategoryControl key={category.id} id={id} onSetCreateNewSection={handleCreateNewSection} sections={sections} onSetCreateNewTicket={handleCreateNewTicket} profile={profile}/>
       <div className='header'>
         <div className='title'>
           <h3>{category.content}</h3>
@@ -109,7 +109,7 @@ const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTick
           </div>
         </div>
       </div>
-      <ViewTicket viewTicket={viewTicket} onSetViewTicket={setViewTicket} onSetHandleTicketEdit={handleTicketEdit} comments={ticketComments} profile={profile}/>
+      <ViewTicket viewTicket={viewTicket} onSetViewTicket={setViewTicket} onSetHandleTicketEdit={handleTicketEdit} comments={ticketComments} profile={profile} users={users}/>
       {sections.map(section =>
         <CategorySection
           key={section.id}
