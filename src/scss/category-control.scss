@@ -14,8 +14,7 @@ $blueHoverColor: #4a90e2;
     .controls-1,
     .controls-2,
     .controls-3,
-    .controls-4,
-    .controls-5 {
+    .controls-4 {
         display: flex;
         height: 30px;
         position: relative;
@@ -38,8 +37,7 @@ $blueHoverColor: #4a90e2;
         &.controls-1::after,
         &.controls-2::after,
         &.controls-3::after,
-        &.controls-4::after,
-        &.controls-5::after {
+        &.controls-4::after{
             content: '';
             position: absolute;
             bottom: 0;
@@ -53,11 +51,15 @@ $blueHoverColor: #4a90e2;
         &.controls-1:hover::after, 
         &.controls-2:hover::after, 
         &.controls-3:hover::after, 
-        &.controls-4:hover::after, 
-        &.controls-5:hover::after {
+        &.controls-4:hover::after{
             width: 100%;
             left: 0;
         }
+    }
+
+    // This displays the User Profile
+    .controls-5 {
+        grid-area: 1/7/2/9;
     }
 }
 

@@ -3,9 +3,10 @@ import '../scss/category-control.scss';
 import Priority from './Priority';
 import ColorSection from './ColorSection';
 import Calendar from './Calendar';
+import ProfileIcon from './ProfileIcon';
 
 
-export default function CategoryControl({id, onSetCreateNewSection, sections, onSetCreateNewTicket}) {
+export default function CategoryControl({id, onSetCreateNewSection, sections, onSetCreateNewTicket, profile}) {
 
   const [isVisble, setIsVisible] = useState(false);
   const [toShowInSection2, setToShowInSection2] = useState(null);
@@ -130,6 +131,10 @@ export default function CategoryControl({id, onSetCreateNewSection, sections, on
 
       <div className="controls-3" onClick={() => handleSetOverlay('ticket')}>
         <i className="bi bi-plus" /> Ticket
+      </div>
+
+      <div className="controls-5">
+        <ProfileIcon profile={profile} width={39} height={39} providedMessage={'Select a profile'}/>
       </div>
 
       <div className={`overlay ${isVisble ? 'visible' : ''}`}>
