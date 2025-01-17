@@ -1,6 +1,33 @@
 $blueHoverColor: #1582ff;
 
-textarea {
+.component-add-comment {
+    margin-top: 40px;
+    position: relative;
+
+    .component-label {
+        display: flex;
+        position: absolute;
+        top: -27px;
+        background-color: white;
+        padding: 5px 5px 5px 10px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        border-top: 1px solid #e9e8e8;
+        border-left: 1px solid #e9e8e8;
+        border-right: 1px solid #e9e8e8;
+        cursor: pointer;
+
+        i {
+            margin-right: 10px;
+        }
+
+        &:hover {
+            color: $blueHoverColor;
+        }
+    }
+}
+
+.add-comment-textarea {
     display: flex;
     width: 100%;
     min-height: 70px;
@@ -14,6 +41,7 @@ textarea {
     border: 1px solid #e9e8e8;
     background-color: white;
     border-radius: 8px;
+    border-top-left-radius: 0px;
     box-shadow: 0 2px 2px #0000001a;
     resize: vertical;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
