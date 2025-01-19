@@ -47,12 +47,12 @@ export default function AddComment({parentCommentID = null, onSetAddCommentToTic
 
   return (
     <div className='component-add-comment'>
-      <div className='component-label' onClick={() => handleEnableButtons('textarea')}>
+      <div className={`component-label ${enableButtons ? 'add-borders' : ''}`} onClick={() => handleEnableButtons('textarea')}>
         <i className='bi bi-chat-left' />
         <p>Add comment</p>
       </div>
 
-      <textarea className='add-comment-textarea' value={content} onChange={(e) => handleContent(e.target.value)} onClick={() => handleEnableButtons('textarea')} />
+      <textarea className={`add-comment-textarea ${enableButtons ? 'add-borders' : ''}`} value={content} onChange={(e) => handleContent(e.target.value)} onClick={() => handleEnableButtons('textarea')} />
         <div className='comments-control'>
           {
             enableButtons &&

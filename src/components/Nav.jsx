@@ -8,13 +8,14 @@ const Nav = ({links, onSetUpdateLinks, onSetUpdateViewCategory, profile = null})
   const [tempLinkName, setTempLinkName] = useState(null);
 
   const createNewCategory = () => {
-
-    if (links.length > 9) return;
+    // Don't allow create a new category if exceeds limit or no profile is selected
+    if (links.length > 9 || !profile) return;
 
     let newCategory = {
       owner: profile,
       icon: generateIconForCustomLinks('New...'),
       content: 'New...',
+      sharedWith: [],
       sections: [],
     };
 
@@ -22,7 +23,6 @@ const Nav = ({links, onSetUpdateLinks, onSetUpdateViewCategory, profile = null})
     let id = links.reduce((max, item) => (item.id > max ? item.id : max), 0);
 
     newCategory = {...newCategory, id: id + 1, content: newCategory.content}
-    console.log('new category', newCategory);
 
     onSetUpdateLinks([...links, newCategory]);
   }
