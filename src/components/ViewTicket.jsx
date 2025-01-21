@@ -3,7 +3,7 @@ import '../scss/view-ticket.scss';
 import Comment from './Comment';
 import AddComment from './AddComment';
 
-export default function ViewTicket({viewTicket, onSetViewTicket, onSetHandleTicketEdit, profile = null}) {
+export default function ViewTicket({viewTicket, onSetViewTicket, onSetHandleTicketEdit, profile = null, users}) {
 
 
   const [allowEditName, setAllowEditName] = useState(false);
@@ -13,6 +13,17 @@ export default function ViewTicket({viewTicket, onSetViewTicket, onSetHandleTick
   const [ticketDescription, setTicketDescription] = useState(viewTicket?.description || '');
 
   const [ticketComments, setTicketComments] = useState(viewTicket?.comments || []);
+
+  const [expanded, setExpand] = useState(false);
+
+  const [expandCommentsList, setExpandCommentsList] = useState(false);
+
+  // State for user results
+  const [expandResults, setExpandDropDown] = useState(false);
+  const [assignableUsers, setAssignableUsers] = useState([]);
+  const [temporarySaveAssignableUsers, setTemporarySaveAssignableUsers] = useState([]);
+
+  const usersToAssign = (profile && viewTicket !== false) && users.filter(user => (user.id !== profile.id && !viewTicket.assignee.includes(user)));
 
   // Temporarily stores the ticket description to avoid unnecessary re-renders during typing
   const tempTicketDescription = useRef('');
@@ -100,54 +111,248 @@ export default function ViewTicket({viewTicket, onSetViewTicket, onSetHandleTick
     onSetHandleTicketEdit(updatedTicket);
   }
 
+  const handleCommentReplyEditUpdate = (comment) => {
+    const commentsUpdated = viewTicket.comments.map(comm => comm.id === comment.id ? comment : comm);
+
+    const updatedTicket = {...viewTicket, comments: commentsUpdated}
+
+    onSetHandleTicketEdit(updatedTicket);
+  }
+
+  const expandSection = (action) => {
+    if (action === 'expand') { 
+      recalculateAssignedAndAvailableUsers();
+    } else if (action === 'collapse') {
+      // Collapse button to hide the search bar
+      setExpand(() => false);
+      setExpandDropDown(() => false);
+      setAssignableUsers(() => []);
+
+    } else if (action === 'click-search-bar') {
+      // Search bar is clicked and we display the drop down results
+      setExpandDropDown(() => true);
+
+    } else if (action === 'Escape') {
+      // Escape key presses and we close the drop down results
+      setExpandDropDown(() => false);
+
+    } else if (action === 'close-view-ticket') {
+      // Button to close Ticket view triggered and we must reset everything to initial state 
+      onSetViewTicket(() => false);
+      setAssignableUsers(() => []);
+      setExpand(() => false);
+      setExpandDropDown(() => false);
+      setExpandCommentsList(() => false);
+      setAllowEditName(() => false);
+    }
+  }
+
+  const recalculateAssignedAndAvailableUsers = () => {
+          // Expand the section and prepare the list of users with the assigned ones and not assigned yet
+          let usersReadyToAssign = [...users];
+
+          usersReadyToAssign.forEach(user => {
+            // Assume user is not assigned
+            user.checked = false;
+    
+            viewTicket.assignee.forEach(assignedUser => {
+              if (user.id === assignedUser.id) {
+                // Set user as assigned only if there's a match
+                user.checked = true;
+              }
+            });
+          });
+    
+          setAssignableUsers(() => usersReadyToAssign)
+          setExpand(() => true);
+          setTemporarySaveAssignableUsers(() => usersReadyToAssign);
+  }
+
+  const searchUsersReadyToAssign = (value) => {
+
+    if (value === '' || value === 'Backspace') {
+      recalculateAssignedAndAvailableUsers();
+      return;
+    }
+
+    const regex = new RegExp(`^${value}`, "i");
+  
+    const results = assignableUsers.filter(user => regex.test(user.name));
+    setAssignableUsers(() => results);
+  }
+
+  const handleAssignmentAndRemovalFromTicket = (check, user) => {
+    // Maximum allowed users on one ticket
+    const maxUsersToTicketAssign = 3;
+
+    if (viewTicket.assignee.length > maxUsersToTicketAssign && !check) return;
+
+    const usersList = assignableUsers.map(individual => user.id === individual.id ? {...individual, checked: !check} : individual);
+
+    setAssignableUsers(() => usersList);
+
+    // Represent the ticket with assigned users field updated
+    let ticketUpdated = null;
+
+    if (!check) {
+      // Assign user to ticket
+      if (viewTicket.assignee.length > maxUsersToTicketAssign) return;
+  
+      ticketUpdated = {...viewTicket, assignee: [...viewTicket.assignee, user]};
+
+    } else {
+      // Unassign user from ticket assignment
+      const assignedUsers = viewTicket.assignee.filter(assignee => assignee.id !== user.id);
+
+      ticketUpdated = {...viewTicket, assignee: assignedUsers};
+    }
+
+    // Update the ticket state
+    onSetHandleTicketEdit(ticketUpdated);
+  }
+
   return (
       <div className={`view-ticket-overlay ${viewTicket ? `expand` : ''}`}>
 
         <div className='close-icon'>
-          <i className='bi bi-x-lg' onClick={() => onSetViewTicket(() => false)}/>
+          <i className='bi bi-x-lg' onClick={() => expandSection('close-view-ticket')}/>
         </div>
-        {
-          viewTicket &&
+        {viewTicket &&
           <>
-            <div className='ticket-name'>
+            <div className='ticket-name-wrapper'>
               {allowEditName ?
-                <input
-                  maxLength={70}
-                  autoFocus={true}
-                  onChange={(e) => handleEditTicketName(e.target.value, 'editing')}
-                  value={ticketName}
-                  onKeyDown={(e) => handleEditTicketName(e.key, 'saveOrCancelEdit')}
-                /> :
-                <h4 onClick={handleAllowEditTicketName}>{ticketName}</h4>
+                <>
+                  <input
+                    maxLength={70}
+                    autoFocus={true}
+                    onChange={(e) => handleEditTicketName(e.target.value, 'editing')}
+                    value={ticketName}
+                    onKeyDown={(e) => handleEditTicketName(e.key, 'saveOrCancelEdit')}
+                    /> 
+                  <div className='name-actions'>
+                    <i className='bi bi-x-lg' onClick={() => handleEditTicketName('Escape', 'saveOrCancelEdit')} />
+                    <i className='bi bi-check-lg' onClick={() => handleEditTicketName('Enter', 'saveOrCancelEdit')} />
+                  </div>
+                </>
+                :
+                <>
+                  <div className='ticket-name' >
+                    {ticketName}
+                  </div>
+                  <div className='name-actions'>
+                    <i className='bi bi-pencil-square' onClick={handleAllowEditTicketName} />
+                  </div>
+                </>
               }
             </div>
+
             <div className='ticket-description'>
-              {
-                allowEditDescription ?
-                <div className='textarea' contentEditable={true} suppressContentEditableWarning={true} onInput={(e) => handleDescriptionTyping(e.target.innerText)} >
-                  {ticketDescription}
-                </div> :
-                <div className='descriptions'>
-                  {ticketDescription.length === 0 ? <small>Add your description here...</small> : renderTicketDescription()}
+              <div className='description-wrapper'>
+                <div className='description-label'>
+                  {allowEditDescription ?
+                    <div className='action-on-edit'>
+                      <i className='bi bi-x-lg' onClick={() => setAllowEditDescription(() => false)}/>
+                      <i className='bi bi-check-lg' onClick={() => handleTicketDescription()}/>
+                    </div> :
+                    <div className='edit-description' onClick={() => setAllowEditDescription(() => true)}>
+                      <i className='bi bi-pencil-square' />
+                      <p>Edit</p>
+                    </div>
+                  }
                 </div>
-              }
-              <div className='controls'>
-                {allowEditDescription ?
-                  <>
-                    <i className='bi bi-x-lg' onClick={() => setAllowEditDescription(() => false)}/>
-                    <i className='bi bi-check-lg' onClick={() => handleTicketDescription()}/>
-                  </> :
-                  <i className='bi bi-pencil-square' onClick={() => setAllowEditDescription(() => true)}/>
+                {
+                  allowEditDescription ?
+                  <div className='textarea' contentEditable={true} suppressContentEditableWarning={true} onInput={(e) => handleDescriptionTyping(e.target.innerText)} >
+                    {ticketDescription}
+                  </div> :
+                  <div className='descriptions'>
+                    {ticketDescription.length === 0 ? <small>Add your description here...</small> : renderTicketDescription()}
+                  </div>
                 }
               </div>
-              <div className='comments'>
-                {
-                  ticketComments.length > 0 &&
-                  ticketComments.map(
-                    comment => <Comment key={comment.id} comment={comment} onSetDeleteCommentFromTicket={deleteCommentFromTicket} profile={profile} onSetHandleCommentReply={handleCommentReply}/>
-                  )
-                }
-                <AddComment onSetAddCommentToTicket={addCommentToTicket} />
+              <div className='controls' />
+              <div className={`ticket-assignment ${expanded && 'expanded'} ${viewTicket.assignee.length > 0 && 'keep-expanded'}`}>
+                  <div className='section-title'>
+                    { !expanded &&
+                      <div className='trigger-user-assignment-section' onClick={() => expandSection('expand')}>
+                        <i className='bi bi-person-add' />
+                        <p>Assign users...</p>
+                      </div>
+                    }
+                  </div>
+                  <div className={`assigned-section ${expanded ? 'expanded' : ''}`} >
+                    {
+                      viewTicket.assignee.map(user =>
+                        <div
+                          key={user.id}
+                          className={`individual-user ${expanded ? 'expanded' : ''}`}
+                          onClick={() => expandSection('expand')}
+                        >
+                          <i
+                            className='bi bi-trash-fill'
+                            onClick={(() => handleAssignmentAndRemovalFromTicket(true, user))}
+                          />
+                          <img
+                            className={`assigned-user ${expanded ? 'expanded' : ''}`}
+                            alt='Assigned user'
+                            src={user.image}
+                          />
+                        </div>)
+                    }
+                  </div>
+                  <div className={`to-assign ${expanded ? 'expanded' : ''} ${viewTicket.assignee.length === 0 ? 'take-all-space' : ''}`}>
+                    <div className='wrapper-search-and-results'>
+                      <input
+                        type='text'
+                        placeholder='Search to assign/remove'
+                        onChange={(e) => searchUsersReadyToAssign(e.target.value)}
+                        onClick={() => expandSection('click-search-bar')}
+                        onKeyDown={(e) => expandSection(e.key)}
+                      />
+                      <div className={`search-results ${expandResults ? 'expand-results' : ''}`}>
+                        {
+                          (assignableUsers.length > 0) && assignableUsers.map(user =>
+                            <div className='found-user' key={user.id}>
+                              <img className='image' src={user.image} />
+                              <small className='name'>{user.name}</small>
+                              <input
+                                className='assign-input'
+                                type='checkbox'
+                                checked={user.checked}
+                                value={user.checked}
+                                onChange={() => handleAssignmentAndRemovalFromTicket(user.checked, user)}
+                              />
+                            </div>
+                          )
+                        }
+                      </div>
+                    </div>
+                    <i className='bi bi-arrow-left-square-fill' onClick={() => expandSection('collapse')}/>
+                  </div>
+                </div>
+                <div className='comments'>
+                  <AddComment onSetAddCommentToTicket={addCommentToTicket} />
+                  <div className={`comments-wrapper ${expandCommentsList ? 'expand' : (ticketComments.length < 3 ? 'expand' : '')}`}>
+                    {
+                      ticketComments.length > 0 &&
+                      ticketComments.slice().reverse().map(
+                        comment => 
+                        <Comment
+                          key={comment.id}
+                          comment={comment}
+                          onSetDeleteCommentFromTicket={deleteCommentFromTicket}
+                          profile={profile}
+                          onSetHandleCommentReply={handleCommentReply}
+                          onSetHandleCommentReplyEditUpdate={handleCommentReplyEditUpdate}
+                        />
+                      )
+                    }
+                  </div>
+                  { !expandCommentsList && ticketComments.length > 2 &&
+                    <div className='wrapper-label' onClick={() => setExpandCommentsList(() => true)}>
+                      <i className='bi bi-three-dots' />
+                    </div>
+                  }
               </div>
             </div>
           </>
