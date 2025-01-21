@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Day from './Day';
+import '../scss/calendar.scss';
 
 export default function Calendar() {
   const years = [
@@ -41,9 +42,21 @@ export default function Calendar() {
     { name: "December", value: 12 },
   ];
 
+  const weekDays = [
+    { id: 1, name: "Monday" },
+    { id: 2, name: "Tuesday" },
+    { id: 3, name: "Wednesday" },
+    { id: 4, name: "Thursday" },
+    { id: 5, name: "Friday" },
+    { id: 6, name: "Saturday" },
+    { id: 7, name: "Sunday" },
+  ];
+
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [selectedDays, setSelectedDays] = useState(null);
+
+  const [selectedDay, setSelectedDay] = useState(null);
 
   const handleSelectYear = (year) => {
     setSelectedYear(() => year);
@@ -58,7 +71,6 @@ export default function Calendar() {
 
   const getDays = (year, month) => {
     const days = new Date(year, month, 0).getDate();
-    console.log('days', days);
     return days;
   }
 
@@ -71,24 +83,57 @@ export default function Calendar() {
 
   }, []);
 
+  const handleButtonMonthSelection = (direction) => {
+    setSelectedDay(() => null);
+
+    let year = null;
+    let month = null;
+    let position = null;
+
+    if (direction === 'left') {
+      year = (selectedMonth.name !== 'January' ? selectedYear : selectedYear - 1);
+      position = (selectedMonth.value === 1 ? 11 : selectedMonth.value - 2);
+    } else  {
+      year = (selectedMonth.name !== 'December' ? selectedYear : selectedYear + 1);
+      position = (selectedMonth.value === 12 ? 0 : selectedMonth.value);
+    }
+
+    month = months[position];
+
+    handleSelectYear(year);
+    handleSelectMonth(month.name);
+  }
+
   const days = Array.from({length: selectedDays}, (_, i) => i + 1);
+
+  const handleClickedDay = (day) => {
+    if (selectedDay === day) {
+      setSelectedDay(() => null);
+      return
+    }
+
+    setSelectedDay(() => day);
+  }
 
   return (
     <div className='calendar'>
-      <select onChange={(e) => handleSelectYear(e.target.value)} >
-        {years.map((year, index)=> <option key={index} value={year}>{year}</option>)}
-      </select>
+      <div className='calendar-control'>
+      <i className='bi bi-arrow-left-circle' onClick={() => handleButtonMonthSelection('left')}/>
+        <div className='status'>
+          <h4>{selectedMonth && selectedMonth.name}</h4>
+          <h4>{selectedYear}</h4>
+        </div>
+        <i className='bi bi-arrow-right-circle' onClick={() => handleButtonMonthSelection('right')} />
+      </div>
 
-      <select onChange={(e) => handleSelectMonth(e.target.value)}>
-        {months.map((month, index)=> <option key={index} value={month.name}>{month.name}</option>)}
-      </select>
-
-      <h4>{selectedYear}</h4>
-      <h4>{selectedMonth && selectedMonth.name}</h4>
-      <h4>{selectedDays}</h4>
+      <div className='week-days'>
+        {
+          weekDays.map(day => <div className='day-name' key={day.id}>{day.name}</div>)
+        }
+      </div>
 
       <div className='days'>
-        {days.map((day, index) => <Day key={index} dayNumber={day}/>)}
+        {days.map((day, index) => <Day key={index} dayNumber={day} selectedDay={selectedDay} onSetHandleClickedDay={handleClickedDay}/>)}
       </div>
     </div>
   )
