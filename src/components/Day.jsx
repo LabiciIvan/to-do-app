@@ -1,5 +1,9 @@
-export default function Day({dayNumber}) {
+import '../scss/day.scss';
+
+export default function Day({dayNumber, selectedDay, onSetHandleClickedDay}) {
   return(
-    <button>{dayNumber}</button>
+    <div className={`day ${selectedDay === dayNumber ? 'selected-day' : ''}`} onClick={() => onSetHandleClickedDay(dayNumber)}>
+      {dayNumber}
+    </div>
   )
 }
