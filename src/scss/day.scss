@@ -1,0 +1,27 @@
+
+$normalGray: #333333;
+$blueHoverColor: #4a90e2;
+
+.day {
+    display: flex;
+    border: 1px solid $normalGray;
+    justify-content: center;
+    align-items: center;
+    border-radius:7px;
+    color: gray;
+
+    &:hover {
+        color: $blueHoverColor;
+        border: 1px solid $blueHoverColor;
+        cursor: pointer;
+        font-size: 20px;
+        transition: font-size 0.2s ease, color 0.2 ease-in;
+    }
+
+
+    &.selected-day {
+        border: none;
+        background-color: #007BFF;
+        color: white;
+    }
+}
