@@ -101,6 +101,29 @@ export default function App() {
     setMainNavLinks(() => updatedNavLinksCategory);
   }
 
+    const moveTicketToSection = (ticketID, moveToSectionID, currentSectionID) => {
+
+      const sectionTicketExists = viewCategory.sections.filter(section => section.id === currentSectionID)[0];
+
+      const ticket = sectionTicketExists.tickets.filter(ticket => ticket.id == ticketID)[0];
+
+      const updatedTicket = {...ticket, belongsTo: moveToSectionID}
+
+      const sectionWithRemovedTicket = sectionTicketExists.tickets.filter(ticket => ticket.id !== ticketID);
+
+      const updatedSection = {...sectionTicketExists, tickets: sectionWithRemovedTicket}
+
+      const viewCategoryWithSectionUpdated = viewCategory.sections.map(section => section.id === updatedSection.id ? updatedSection : section);
+
+      const viewCategoryWithTicketAddedToSecion = viewCategoryWithSectionUpdated.map(section => section.id === updatedTicket.belongsTo ? {...section, tickets: [...section.tickets, updatedTicket]} : section);
+
+      const updatedViewCategory = {...viewCategory, sections: viewCategoryWithTicketAddedToSecion}
+
+      const updatedNavLinksCategory = mainNavLinks.map(link => link.id === updatedViewCategory.id ? updatedViewCategory : link);
+
+      setMainNavLinks(() => updatedNavLinksCategory);
+    }
+
   return (
     <div className='app'>
       <Nav links={mainNavLinks} onSetUpdateLinks={updateNavLinks} onSetUpdateViewCategory={updateViewCategory} profile={profile} />
@@ -117,6 +140,7 @@ export default function App() {
               onSetUpdateCategoryAsTicketPriorityChanged={handleUpdateCategoryAsTicketPriorityChanged}
               profile={profile}
               users={profiles}
+              onSetMoveTicketToSection={moveTicketToSection}
             />
             :
             viewPage && viewPage.content === 'Profile' ? (
