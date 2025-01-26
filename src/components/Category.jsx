@@ -6,7 +6,7 @@ import CategoryControl from './CategoryControl';
 import CategorySection from './CategorySection';
 import ViewTicket from './ViewTicket';
 
-const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTicketToSection, onSetUpdateCategorySection, onSetHandleDeleteSectionFromCategory, onSetHandleDeleteCategory, onSetUpdateCategoryAsTicketPriorityChanged, profile = null, users}) => {
+const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTicketToSection, onSetUpdateCategorySection, onSetHandleDeleteSectionFromCategory, onSetHandleDeleteCategory, onSetUpdateCategoryAsTicketPriorityChanged, profile = null, users, onSetMoveTicketToSection}) => {
 
   const [viewTicket, setViewTicket] = useState(false);
   const [ticketComments, setTicketComments] = useState([]);
@@ -17,10 +17,10 @@ const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTick
 
     if (name.length === 0) return;
 
-    const ID = sections.reduce((max, section) => (section.id > max ? section.id : max + 1), 0);
+    const ID = sections.reduce((max, section) => (section.id > max ? section.id : max), 0);
 
     const section = {
-      id: ID,
+      id: ID + 1,
       name: name,
       color: color,
       tickets: []
@@ -32,16 +32,19 @@ const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTick
   const handleCreateNewTicket = (sectionID, ticketName, ticketPriority) => {
 
     let ID = 0
-
+    let tmp = 0;
     // Create the ID for the specific section
     sections.forEach(section => {
-      if (section.id === sectionID) {
-        ID = section.tickets.reduce((max, ticket) => (ticket.id > max ? ticket.id : max + 1), 0)
+
+      tmp = section.tickets.reduce((max, ticket) => (ticket.id > max ? ticket.id : max + 1), 0)
+
+      if (tmp > ID) {
+        ID = tmp;
       }
     });
 
     const ticket = {
-      id: ID,
+      id: ID + 1,
       belongsTo: sectionID,
       name: ticketName,
       priority: ticketPriority,
@@ -109,15 +112,17 @@ const Category = ({category, onSetHandleStoreNewSection, onSetHandleStoreNewTick
           </div>
         </div>
       </div>
-      <ViewTicket viewTicket={viewTicket} onSetViewTicket={setViewTicket} onSetHandleTicketEdit={handleTicketEdit} comments={ticketComments} profile={profile} users={users}/>
+      <ViewTicket viewTicket={viewTicket} onSetViewTicket={setViewTicket} onSetHandleTicketEdit={handleTicketEdit} comments={ticketComments} profile={profile} users={users} sections={sections} onSetMoveTicketToSection={onSetMoveTicketToSection}/>
       {sections.map(section =>
         <CategorySection
           key={section.id}
           section={section}
+          sections={sections}
           onSetChangeSectionNameAndColor={changeSectionNameAndColor}
           onSetDeleteSectionFromCategory={handleDeleteSectionFromCategory}
           onSetSaveNewSectionToCategory={handleUpdateCategorySectionWithNewSection}
           onSetHandleViewTicket={handleViewTicket}
+          onSetMoveTicketToSection={onSetMoveTicketToSection}
         />
       )}
     </div>
