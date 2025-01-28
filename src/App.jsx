@@ -146,7 +146,7 @@ export default function App() {
             viewPage && viewPage.content === 'Profile' ? (
               <Profile profiles={profiles} profile={profile} onSetProfile={setProfile} />
             ) : viewPage.content === 'Inbox' ? (
-              <Inbox />
+              <Inbox profile={profile}/>
             ) : (
               <Home />
             )
