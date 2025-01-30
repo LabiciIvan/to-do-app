@@ -2,9 +2,9 @@ import { useState, useEffect, useRef } from 'react';
 import '../scss/view-ticket.scss';
 import Comment from './Comment';
 import AddComment from './AddComment';
+import MoveTicket from './MoveTicket';
 
-export default function ViewTicket({viewTicket, onSetViewTicket, onSetHandleTicketEdit, profile = null, users}) {
-
+export default function ViewTicket({viewTicket, onSetViewTicket, onSetHandleTicketEdit, profile = null, users, sections, onSetMoveTicketToSection}) {
 
   const [allowEditName, setAllowEditName] = useState(false);
   const [ticketName, setTicketName] = useState(viewTicket?.name || '');
@@ -23,7 +23,10 @@ export default function ViewTicket({viewTicket, onSetViewTicket, onSetHandleTick
   const [assignableUsers, setAssignableUsers] = useState([]);
   const [temporarySaveAssignableUsers, setTemporarySaveAssignableUsers] = useState([]);
 
-  const usersToAssign = (profile && viewTicket !== false) && users.filter(user => (user.id !== profile.id && !viewTicket.assignee.includes(user)));
+  const ticketNameRef = useRef();
+
+  // Temporarily store the ticket name to avoid unnecessary re-renders during name edit
+  const tempTicketName = useRef('');
 
   // Temporarily stores the ticket description to avoid unnecessary re-renders during typing
   const tempTicketDescription = useRef('');
@@ -34,27 +37,37 @@ export default function ViewTicket({viewTicket, onSetViewTicket, onSetHandleTick
     setTicketComments(() => viewTicket?.comments || '');
   }, [viewTicket]);
 
+  useEffect(() => {
+    if (ticketNameRef.current && !allowEditName) {
+      ticketNameRef.current.innerText = ticketName;
+    }
+  }, [ticketName, allowEditName]);
+
   const handleAllowEditTicketName = () => {
     setAllowEditName(prev => !prev);
   }
 
-  const handleEditTicketName = (value = '', type) => {
-    if (type === 'editing') {
-      setTicketName(() => value);
-    } else if (type === 'saveOrCancelEdit') {
-      if (value === 'Enter') {
-        setAllowEditName(prev => !prev);
-        setTicketName(() => ticketName);
-        const editedTicket = {...viewTicket, name: ticketName};
+  const handleEditTicketName = (value = '') => {
+    setAllowEditName(prev => !prev);
 
-        onSetHandleTicketEdit(editedTicket);
+    if (value === 'Save') {
+      setTicketName(() => tempTicketName.current);
+    
+      const editedTicket = {...viewTicket, name: tempTicketName.current};
 
-        // Handle save new ticket name
-      } else if (value === 'Escape') {
-        setAllowEditName(prev => !prev);
-        setTicketName(() => viewTicket.name)
-      }
+      onSetHandleTicketEdit(editedTicket);
+    } else if (value === 'Abort') {
+      tempTicketName.current = '';
     }
+  }
+
+  const handleNameTyping = (value) => {
+    if (value.length > 65) {
+      ticketNameRef.current.innerText =tempTicketName.current;
+      return;
+    }
+
+    tempTicketName.current = (value);
   }
 
   const handleDescriptionTyping = (value) => {
@@ -148,24 +161,24 @@ export default function ViewTicket({viewTicket, onSetViewTicket, onSetHandleTick
   }
 
   const recalculateAssignedAndAvailableUsers = () => {
-          // Expand the section and prepare the list of users with the assigned ones and not assigned yet
-          let usersReadyToAssign = [...users];
+    // Expand the section and prepare the list of users with the assigned ones and not assigned yet
+    let usersReadyToAssign = [...users];
 
-          usersReadyToAssign.forEach(user => {
-            // Assume user is not assigned
-            user.checked = false;
-    
-            viewTicket.assignee.forEach(assignedUser => {
-              if (user.id === assignedUser.id) {
-                // Set user as assigned only if there's a match
-                user.checked = true;
-              }
-            });
-          });
-    
-          setAssignableUsers(() => usersReadyToAssign)
-          setExpand(() => true);
-          setTemporarySaveAssignableUsers(() => usersReadyToAssign);
+    usersReadyToAssign.forEach(user => {
+      // Assume user is not assigned
+      user.checked = false;
+
+      viewTicket.assignee.forEach(assignedUser => {
+        if (user.id === assignedUser.id) {
+          // Set user as assigned only if there's a match
+          user.checked = true;
+        }
+      });
+    });
+
+    setAssignableUsers(() => usersReadyToAssign)
+    setExpand(() => true);
+    setTemporarySaveAssignableUsers(() => usersReadyToAssign);
   }
 
   const searchUsersReadyToAssign = (value) => {
@@ -219,31 +232,22 @@ export default function ViewTicket({viewTicket, onSetViewTicket, onSetHandleTick
         </div>
         {viewTicket &&
           <>
-            <div className='ticket-name-wrapper'>
-              {allowEditName ?
-                <>
-                  <input
-                    maxLength={70}
-                    autoFocus={true}
-                    onChange={(e) => handleEditTicketName(e.target.value, 'editing')}
-                    value={ticketName}
-                    onKeyDown={(e) => handleEditTicketName(e.key, 'saveOrCancelEdit')}
-                    /> 
-                  <div className='name-actions'>
-                    <i className='bi bi-x-lg' onClick={() => handleEditTicketName('Escape', 'saveOrCancelEdit')} />
-                    <i className='bi bi-check-lg' onClick={() => handleEditTicketName('Enter', 'saveOrCancelEdit')} />
-                  </div>
-                </>
-                :
-                <>
-                  <div className='ticket-name' >
-                    {ticketName}
-                  </div>
-                  <div className='name-actions'>
-                    <i className='bi bi-pencil-square' onClick={handleAllowEditTicketName} />
-                  </div>
-                </>
-              }
+            <div className='title-wrapper'>
+              <div className='ticket-name-section'>
+                <div className={`ticket-name ${allowEditName ? 'edit' : ''}`} contentEditable={allowEditName} onInput={(e) => handleNameTyping(e.target.innerText)} suppressContentEditableWarning={true} ref={ticketNameRef}>
+                  {ticketName}
+                </div>
+                <div className='name-actions'>
+                  { allowEditName ?
+                    <>
+                      <i className='bi bi-x-lg' onClick={() => handleEditTicketName('Abort')} />
+                      <i className='bi bi-check-lg' onClick={() => handleEditTicketName('Save')} />
+                    </> :
+                      <i className='bi bi-pencil-square' onClick={handleAllowEditTicketName} />
+                  }
+                </div>
+              </div>
+              <MoveTicket sections={sections} ticket={viewTicket} onSetMoveTicketToSection={onSetMoveTicketToSection}/>
             </div>
 
             <div className='ticket-description'>
