@@ -3,7 +3,7 @@ import '../scss/category-section.scss';
 import Ticket from './Ticket';
 import ColorSection from './ColorSection';
 
-export default function CategorySection({section, onSetChangeSectionNameAndColor, onSetDeleteSectionFromCategory, onSetSaveNewSectionToCategory, onSetHandleViewTicket}) {
+export default function CategorySection({section, onSetChangeSectionNameAndColor, onSetDeleteSectionFromCategory, onSetSaveNewSectionToCategory, onSetHandleViewTicket, sections, onSetMoveTicketToSection}) {
   const [expand, setExpand] = useState(true);
   const [sectionName, setSectionName] = useState(section.name);
   const [editSectionName, setEditSectionName] = useState(false);
@@ -94,7 +94,7 @@ export default function CategorySection({section, onSetChangeSectionNameAndColor
         </div>
       </div>
       <div className={`section-tickets ${expand ? 'expanded' : ''}`}>
-        {section.tickets.map(ticket => <Ticket key={ticket.id} ticket={ticket} onSetHandlePriorityChange={handlePriorityChangeOnTicket} onSetHandleViewTicket={onSetHandleViewTicket}/>
+        {section.tickets.map(ticket => <Ticket key={ticket.id} ticket={ticket} onSetHandlePriorityChange={handlePriorityChangeOnTicket} onSetHandleViewTicket={onSetHandleViewTicket} sections={sections} onSetMoveTicketToSection={onSetMoveTicketToSection}/>
         )}
       </div>
     </div>
