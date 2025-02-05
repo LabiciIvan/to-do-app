@@ -124,6 +124,18 @@ export default function App() {
       setMainNavLinks(() => updatedNavLinksCategory);
     }
 
+    const saveDraftEmail = (itemMessage, linkItBelongs) => {
+
+      const updatedDraftsInProfile = profile.mail[linkItBelongs].map(messageItem => messageItem.id === itemMessage.id ? itemMessage : messageItem);
+
+      const updatedProfileMail = {...profile.mail, drafts: updatedDraftsInProfile};
+
+      const updatedProfile = {...profile, mail: updatedProfileMail};
+      console.log('updatedProfile', updatedProfile);
+
+      setProfile(() => updatedProfile);
+    }
+
   return (
     <div className='app'>
       <Nav links={mainNavLinks} onSetUpdateLinks={updateNavLinks} onSetUpdateViewCategory={updateViewCategory} profile={profile} />
@@ -146,7 +158,7 @@ export default function App() {
             viewPage && viewPage.content === 'Profile' ? (
               <Profile profiles={profiles} profile={profile} onSetProfile={setProfile} />
             ) : viewPage.content === 'Inbox' ? (
-              <Inbox profile={profile}/>
+              <Inbox profile={profile} onSaveMessage={saveDraftEmail}/>
             ) : (
               <Home />
             )
