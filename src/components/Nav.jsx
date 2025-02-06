@@ -72,7 +72,8 @@ const Nav = ({links, onSetUpdateLinks, onSetUpdateViewCategory, profile = null})
   return (
     <nav className='nav'>
       <header>
-        <img src={toDO}/>
+        {/* <img src={toDO}/> */}
+        <h4>TO-DO</h4>
       </header>
       <div className='body'>
         <button className='wrapper-create-nav-links' onClick={createNewCategory}>
