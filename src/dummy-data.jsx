@@ -18,6 +18,53 @@ const john = {
   perks: ["Flexible hours", "Conference passes", "Mentorship opportunities"],
   country: "Canada",
   favoriteFood: "Poutine",
+  mail: {
+    compose: [],
+    inbox: [
+      {
+        id: 1,
+        time: "2025-01-19T10:30:00",
+        sender: { id: 101, name: "John Doe" },
+        title: "Greetings friend",
+        message: `Greetings, friend!\n We are excited to present you with an exclusive opportunity.\n Our team has been on the lookout for talented individuals like you.\n This special offer is tailored to match your unique skills and potential.\n Imagine working on innovative projects that inspire creativity.\n You will collaborate with professionals who are as passionate as you are.\n With flexible working hours, your time will be valued like never before.\n Competitive compensation is just the beginning of the rewards we offer.\n You’ll have access to state-of-the-art tools and resources.\n Your professional growth is important to us, and we invest in it heavily.\n Training programs and mentorship opportunities await you.\n This role also includes exciting challenges to push your limits.\n You’ll have a chance to leave a mark in a rapidly growing industry.\n Imagine contributing to impactful projects that shape the future.\n We prioritize work-life balance to ensure your overall well-being.\n Our diverse and inclusive culture welcomes everyone with open arms.\n This is your chance to unlock new possibilities in your career.\n Don’t let this opportunity slip through your fingers.\n Reach out to us now to discuss the next steps.\n We can’t wait to see what you bring to the table!\n`,
+      },
+      {
+        id: 2,
+        time: "2025-01-18T15:45:00",
+        sender: { id: 102, name: "Jane Smith" },
+        title: "Kind reminder",
+        message: `Kind Reminder,\n We are excited to inform you about our upcoming free training session on Web Security and Phishing.\n This training is designed to help you stay safe online and protect your sensitive information.\n Phishing attacks have become more sophisticated, targeting individuals and organizations alike.\n Our session will guide you on how to identify phishing attempts and avoid falling victim to scams.\n You will also learn best practices for creating strong passwords and securing your accounts.\n The training includes real-world scenarios to help you spot potential threats effectively.\n We’ll also cover tips for recognizing suspicious links and emails.\n Whether you are a beginner or tech-savvy, this training is tailored for everyone.\n The session will be conducted online, making it accessible from anywhere.\n Participants will receive a certificate of completion at the end of the session.\n Remember, enhancing your web security skills is a crucial step in today’s digital age.\n Don’t miss this opportunity to learn and protect yourself from cyber threats.\n The training is completely free, but spots are limited, so act fast.\n Reserve your place today by clicking on the registration link provided.\n Feel free to share this opportunity with your colleagues and friends.\n We look forward to seeing you at the training session.\n Stay safe and secure online.\n Best regards,\n The Web Security Team\n`,
+      },
+    ],
+    sent: [],
+    deleted: [
+      {
+        id: 3,
+        time: "2025-01-15T09:00:00",
+        sender: { id: 103, name: "Mike Johnson" },
+        title: "Files by end of the day?",
+        message: `Subject: Request for Files by End of the Day\n Dear [Recipient's Name],\n I hope this email finds you well.\n I am writing to kindly request the files related to [specific project or task] to be sent by the end of the day.\n These files are crucial for [reason or purpose, e.g., "reviewing the next steps" or "meeting the project deadline"].\n If there are any issues or delays, please let me know so we can plan accordingly.\n Your prompt assistance with this would be greatly appreciated.\n Thank you for your cooperation, and please don’t hesitate to reach out if you need any further clarification.\n Looking forward to your reply.\n`,
+      },
+    ],
+    spams: [
+      {
+        id: 4,
+        time: "2025-01-14T08:20:00",
+        sender: { id: 104, name: "Spammer Inc." },
+        title: "You've won a $1,000 gift card!",
+        message: `Subject: You've Won a $1,000 Gift Card! Click Here to Claim\n Congratulations!\n We are thrilled to reward you for your outstanding hard work and dedication.\n Your efforts have not gone unnoticed, and we want to show our appreciation.\n As a token of gratitude, we are excited to present you with a $1,000 gift card.\n This gift card can be used for purchases of your choice, providing you the ultimate freedom to indulge.\n Whether you want to treat yourself or invest in something special, the choice is yours.\n Claiming your gift card is quick and easy.\n Simply click on the link below to start the process:\n [Claim Your Gift Card Now]\n Please note that this reward is exclusively for you and must be claimed by [insert deadline here].\n If you encounter any issues during the claiming process, feel free to reach out to our support team.\n We want to thank you once again for your exceptional contributions.\n Your commitment makes a difference, and we couldn’t be prouder to have you on the team.\n Enjoy your reward—it’s well-deserved!\n Warm regards,\n [Your Company Name]\n [Support Contact Information]\n`,
+      },
+    ],
+    drafts: [
+      {
+        id: 5,
+        time: "2025-01-13T14:10:00",
+        sender: { id: 2, name: "Trevor" },
+        title: "Drafting a message to our client about the project...",
+        message: `Subject: Update on Your Project\n Dear [Client's Name],\n We hope this email finds you well.\n We wanted to provide you with an update regarding your project, [Project Name].\n Our team has been making excellent progress, and we are pleased to share the latest details.\n Currently, we are on track with the timeline outlined during our initial discussions.\n The development phase is progressing smoothly, with key milestones being achieved as planned.\n We have successfully completed [specific task or milestone, e.g., "the initial design phase"].\n Our next focus will be [next steps, e.g., "implementing the core functionalities and conducting quality assurance testing"].\n We are dedicated to ensuring that every aspect of the project aligns with your vision and expectations.\n If there are any changes or additions you'd like to make, now is a great time to let us know.\n We value your feedback and collaboration, as it plays a crucial role in the project’s success.\n Please feel free to reach out if you would like to schedule a meeting to discuss the progress further.\n Additionally, we will provide you with another update on [specific date] to keep you informed every step of the way.\n Thank you for entrusting us with this opportunity to work together.\n We are committed to delivering a high-quality solution that exceeds your expectations.\n Looking forward to your thoughts.\n Warm regards,\n [Your Full Name]\n [Your Job Title]\n [Your Company Name]\n [Contact Information]\n`,
+      },
+    ],
+  }
 }
 
 const trevor = {
@@ -33,6 +80,29 @@ const trevor = {
   perks: ["Flexible hours", "Remote work", "Training programs"],
   country: "Australia",
   favoriteFood: "Vegemite on toast",
+  mail: {
+    compose: [],
+    inbox: [],
+    sent: [],
+    deleted: [ ],
+    spams: [ ],
+    drafts: [
+      {
+        id: 5,
+        time: "2025-01-13T14:10:00",
+        sender: { id: 2, name: "Trevor" },
+        title: "Draft 2.",
+        message: `Simple draft tests`,
+      },
+      {
+        id: 6,
+        time: "2025-01-13T14:10:00",
+        sender: { id: 2, name: "Trevor" },
+        title: "Draft 1",
+        message: `Simple draft tests`,
+      },
+    ],
+  }
 }
 
 const alice = {
@@ -283,6 +353,50 @@ const testCategory = {
   ]
 };
 
+const inboxMessages = {
+  compose: [],
+  inbox: [
+    {
+      id: 1,
+      time: "2025-01-19T10:30:00",
+      sender: { id: 101, name: "John Doe" },
+      message: "Hello! How are you doing today?",
+    },
+    {
+      id: 2,
+      time: "2025-01-18T15:45:00",
+      sender: { id: 102, name: "Jane Smith" },
+      message: "Don't forget our meeting tomorrow at 10 AM.",
+    },
+  ],
+  sent: [],
+  deleted: [
+    {
+      id: 3,
+      time: "2025-01-15T09:00:00",
+      sender: { id: 103, name: "Mike Johnson" },
+      message: "Can you send me the files by end of the day?",
+    },
+  ],
+  spams: [
+    {
+      id: 4,
+      time: "2025-01-14T08:20:00",
+      sender: { id: 104, name: "Spammer Inc." },
+      message: "You've won a $1,000 gift card! Click here to claim.",
+    },
+  ],
+  drafts: [
+    {
+      id: 5,
+      time: "2025-01-13T14:10:00",
+      sender: { id: 105, name: "Yourself" },
+      message: "Drafting a message to our client about the project...",
+    },
+  ],
+};
+
+
 export {
   testCategory,
   john,
@@ -290,5 +404,6 @@ export {
   trevor,
   annie,
   josh,
-  denise
+  denise,
+  inboxMessages
 };
