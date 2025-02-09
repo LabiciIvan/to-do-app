@@ -18,23 +18,31 @@ export default function Home() {
   const {welcome, title: {one, two, hyphen}, subtitleOne, subtitleTwo, logoLanding} = text;
 
   return (
-    <div className='home'>
+    <div className='landing-page'>
+      <header className='header-landing'>
+        <h1 className='header-landing__title'>To Do</h1>
+        <p className='header-landing__subtitle'>Organize, track, and manage your projects with ease.</p>
+        <button className='header-landing__cta'>Get Started</button>
+      </header>
 
-      <div className='hero-section'>
-        <h1 className='welcome'>{welcome}</h1>
-
-        <div className='title'>
-          <h1 className='one'>{one}</h1>
-          <h1 className='hyphen'>{hyphen}</h1>
-          <h1 className='two'>{two}</h1>
+      <section className='features'>
+        <div className='features__item'>
+          <h2>Task Management</h2>
+          <p>Create, assign, and track tasks effortlessly.</p>
         </div>
+        <div className='features__item'>
+          <h2>Collaboration</h2>
+          <p>Work seamlessly with your team in real-time.</p>
+        </div>
+        <div className='features__item'>
+          <h2>Progress Tracking</h2>
+          <p>Monitor project progress with intuitive dashboards.</p>
+        </div>
+      </section>
 
-        <h1 className='subtitle-one'>{subtitleOne}</h1>
-
-        <h1 className='subtitle-two'>{subtitleTwo}</h1>
-
-        <img className='logo' src={logoLanding} alt="Landing Page Logo" /> 
-      </div>
+      <footer className='footer'>
+        <p>&copy; 2023 - 2025 To Do. All rights reserved.</p>
+      </footer>
     </div>
-  )
+  );
 }
