@@ -1,90 +1,43 @@
 import '../scss/profile-page.scss';
 import ProfileIcon from '../components/ProfileIcon.jsx';
 
-export default function Profile({profiles, profile = null, onSetProfile}) {
+export default function Profile({ profiles, profile, onSetProfile }) {
 
   return (
-    <div className='profile-page'>
-      <div className='header'>
-        <div className='title'>
-          <h4>Profile</h4>
-        </div>
-
-        <div className='description'>
-          <h4>The Profile page serves as a gateway for simulating user login within this mock application</h4>
-          <h4>By selecting a profile user, you unlock the full range of features designed to mimic real-world functionality.</h4>
-          <div className='functionality'>
-            <ul>
-              <li>Creating new categories.</li>
-              <li>Adding sections to categories.</li>
-              <li>Creating and assigning tickets to users.</li>
-              <li>Commenting on tickets and replying to comments.</li>
-            </ul>
+    <div className='profile-container'>
+      <h1 className='profile-title'>Select Your Profile</h1>
+      <p className='profile-description'>
+        Choose a profile to proceed. This page serves as a mock login, allowing you to pick your desired profile.
+      </p>
+      <div className='profile-grid'>
+        {profiles.map((p) => (
+          <div 
+            key={p.name} 
+            className='profile-card' 
+            onClick={() => onSetProfile(p)}
+          >
+            <img src={p.image} alt={p.name} className='profile-card-image' />
+            <div>
+              <h2 className='profile-card-name'>{p.name}</h2>
+              <p className='profile-card-role'>{p.role}</p>
+            </div>
           </div>
-          <h4>While some features are accessible without selecting a profile, choosing a profile user is recommended to experience the application’s full functionality.</h4>
-        </div>
+        ))}
       </div>
-
-      <div className='body'>
-        <div className='left'>
-        {
-          profiles.map(userProfile => 
-            <div className='user' key={userProfile.id} onClick={() => onSetProfile(() => userProfile)}>
-              {
-                <ProfileIcon profile={userProfile} width={100} height={100}/>
-              }
-            </div>
-          )
-        }
+      {profile && (
+        <div className='profile-details'>
+          <h2 className='profile-details-title'>{profile.name}</h2>
+          <p className='profile-details-info'>Age: {profile.age} | Sex: {profile.sex}</p>
+          <p className='profile-details-info'>Country: {profile.country}</p>
+          <p className='profile-details-description'>{profile.description}</p>
+          <h3 className='profile-tech-title'>Tech Stack:</h3>
+          <ul className='profile-tech-list'>
+            {profile.techStack.map((tech, index) => (
+              <li key={index}>{tech}</li>
+            ))}
+          </ul>
         </div>
-        <div className='right'>
-          {profile && 
-            <div className='card'>
-              <div className='short-details'>
-                <div className='details-left'>
-                  <img src={profile.image} alt="" />
-                </div>
-
-                <div className='details-right'>
-                  <p><strong>Name:</strong> {profile.name}</p>
-                  <p><strong>Age:</strong> {profile.age}</p>
-                  <p><strong>Role:</strong> {profile.role}</p>
-                  <p><strong>Sex:</strong> {profile.sex}</p>
-                  <p><strong>Country:</strong> {profile.country}</p>
-                </div>
-              </div>
-
-              <div className='large-details'>
-                <p className='description'>
-                  "{profile.description}"
-                </p>
-
-                <div className='stack'>
-                  <strong>Tech Stack:</strong>
-                  <ul>
-                    {
-                      profile.techStack.map(stack => 
-                        <li key={stack}>{stack}</li>
-                      )
-                    }
-                  </ul>
-                </div>
-
-                <div className='perks'>
-                  <strong>Perks:</strong>
-                  <ul>
-                    {
-                      profile.perks.map(perk => 
-                        <li key={perk}>{perk}</li>
-                      )
-                    }
-                  </ul>
-                </div>
-              </div>
-            </div>
-          }
-        </div>
-      </div>
+      )}
     </div>
-  )
-}
+  );
+};
