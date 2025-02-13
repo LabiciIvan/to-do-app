@@ -7,7 +7,7 @@ $blueHoverColor: #1582ff;
     .component-label {
         display: flex;
         position: absolute;
-        top: -27px;
+        top: -29px;
         background-color: white;
         padding: 5px 5px 5px 10px;
         border-top-left-radius: 5px;
@@ -24,6 +24,12 @@ $blueHoverColor: #1582ff;
         &:hover {
             color: $blueHoverColor;
         }
+
+        &.add-borders {
+            border-left: 1px solid gray;
+            border-top: 1px solid gray;
+            border-right: 1px solid gray;
+        }
     }
 }
 
@@ -37,7 +43,7 @@ $blueHoverColor: #1582ff;
     overflow: hidden;
     outline: none;
 
-    color: #333;
+    color: black;
     border: 1px solid #e9e8e8;
     background-color: white;
     border-radius: 8px;
@@ -47,7 +53,7 @@ $blueHoverColor: #1582ff;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
     margin: 5px 0 5px 0;
 
-    &:focus {
+    &.add-borders {
         border: 1px solid #8d8c8c;
     }
 }
