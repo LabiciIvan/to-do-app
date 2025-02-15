@@ -1,13 +1,25 @@
 $blueHoverColor: #1582ff;
 
+.comments-wrapper {
+    display: flex;
+    flex-direction: column;
+    max-height: 320px;
+    overflow: hidden;
+    margin-top: 20px;
+
+    position: relative;
+    
+    &.expand {
+        max-height: 100%;
+    }
+}
+
 .comment {
     display: flex;
     flex-direction: column;
     width: 100%;
-    // border: 1px solid red;
     margin: 10px 0 10px 0;
     padding: 0 10px 0 10px;
-    // background-color: #efeeee;
     background-color: white;
     box-shadow: 0 2px 2px #00000046;
 
@@ -177,4 +189,27 @@ $blueHoverColor: #1582ff;
             padding: 2px;
         }
     }
+}
+
+.wrapper-label{
+    display: flex;
+    position: absolute;
+    // bottom: -30px;
+    right: 47%;
+    cursor: pointer;
+    padding: 0 10px 0 10px;
+    border-radius: 5px;
+
+    i {
+        font-size: 20px;
+    }
+
+    &:hover {
+        background-color: $blueHoverColor;
+
+        i {
+            color: white;
+        }
+    }
+
 }
